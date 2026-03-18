@@ -1,0 +1,37 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.description" . }}
+
+## Supported Resources
+
+This chart can render the following namespaced resources from `provider-upjet-elasticstack`:
+
+- `ClusterSettings`
+- `IndexLifecycle`
+- `ElasticsearchRole`
+- `ElasticsearchUser`
+- `SnapshotLifecycle`
+- `SnapshotRepository`
+- `ProviderConfig`
+
+## Usage
+
+Render the chart:
+
+```bash
+helm template my-release .
+```
+
+Regenerate the documentation:
+
+```bash
+helm-docs --sort-values-order=file
+```
+
+{{ template "chart.valuesHeader" . }}
+
+The full example schemas live in `values.yaml` as commented examples below each top-level key.
+
+{{ template "chart.valuesTable" . }}
+
+{{ template "helm-docs.versionFooter" . }}

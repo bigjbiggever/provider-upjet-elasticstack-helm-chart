@@ -1,0 +1,59 @@
+{{- range $index, $resource := .Values.providerConfigs }}
+apiVersion: elasticstack.m.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: {{ required (printf "%s[%d].name is required" "providerConfigs" $index) $resource.name }}
+  namespace: {{ default $.Release.Namespace $resource.namespace }}
+  {{- if or $resource.annotations $resource.externalName }}
+  annotations:
+    {{- if $resource.externalName }}
+    crossplane.io/external-name: {{ $resource.externalName | quote }}
+    {{- end }}
+    {{- with $resource.annotations }}
+{{ toYaml . | indent 4 }}
+    {{- end }}
+  {{- end }}
+  {{- if $resource.labels }}
+  labels:
+{{ toYaml $resource.labels | indent 4 }}
+  {{- end }}
+{{- $spec := default (dict) $resource.spec }}
+spec:
+  {{- if hasKey $spec "credentials" }}
+  {{- $providerConfigs_spec_credentials := default (dict) (index $spec "credentials") }}
+  credentials:
+    {{- if hasKey $providerConfigs_spec_credentials "env" }}
+    {{- $providerConfigs_spec_credentials_env := default (dict) (index $providerConfigs_spec_credentials "env") }}
+    env:
+      {{- if hasKey $providerConfigs_spec_credentials_env "name" }}
+      name: {{ index $providerConfigs_spec_credentials_env "name" | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if hasKey $providerConfigs_spec_credentials "fs" }}
+    {{- $providerConfigs_spec_credentials_fs := default (dict) (index $providerConfigs_spec_credentials "fs") }}
+    fs:
+      {{- if hasKey $providerConfigs_spec_credentials_fs "path" }}
+      path: {{ index $providerConfigs_spec_credentials_fs "path" | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if hasKey $providerConfigs_spec_credentials "secretRef" }}
+    {{- $providerConfigs_spec_credentials_secretRef := default (dict) (index $providerConfigs_spec_credentials "secretRef") }}
+    secretRef:
+      {{- if hasKey $providerConfigs_spec_credentials_secretRef "key" }}
+      key: {{ index $providerConfigs_spec_credentials_secretRef "key" | quote }}
+      {{- end }}
+      {{- if hasKey $providerConfigs_spec_credentials_secretRef "name" }}
+      name: {{ index $providerConfigs_spec_credentials_secretRef "name" | quote }}
+      {{- end }}
+      {{- if hasKey $providerConfigs_spec_credentials_secretRef "namespace" }}
+      namespace: {{ index $providerConfigs_spec_credentials_secretRef "namespace" | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if hasKey $providerConfigs_spec_credentials "source" }}
+    source: {{ index $providerConfigs_spec_credentials "source" | quote }}
+    {{- end }}
+  {{- end }}
+{{- if lt (add1 $index) (len $.Values.providerConfigs ) }}
+---
+{{- end }}
+{{- end }}

@@ -1,2 +1,44 @@
-# provider-upjet-elasticstack-helm-chart
-Helm Chart used to deploy MRs used by provider-upjet-elasticstack easily
+# provider-upjet-elasticstack
+
+Helm chart for namespaced managed resources from provider-upjet-elasticstack
+
+## Supported Resources
+
+This chart can render the following namespaced resources from `provider-upjet-elasticstack`:
+
+- `ClusterSettings`
+- `IndexLifecycle`
+- `ElasticsearchRole`
+- `ElasticsearchUser`
+- `SnapshotLifecycle`
+- `SnapshotRepository`
+- `ProviderConfig`
+
+## Usage
+
+Render the chart:
+
+```bash
+helm template my-release .
+```
+
+Regenerate the documentation:
+
+```bash
+helm-docs --sort-values-order=file
+```
+
+## Values
+
+The full example schemas live in `values.yaml` as commented examples below each top-level key.
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| clusterSettings | list | `[]` (see the commented example below for the full schema) | List of namespaced `ClusterSettings` managed resources. `persistent` and `transient` use `settingName: value` or `settingName: [values...]` and are translated to the provider CRD structure by the template. |
+| indexLifecycles | list | `[]` (see the commented example below for the full schema) | List of namespaced `IndexLifecycle` managed resources. |
+| elasticsearchRoles | list | `[]` (see the commented example below for the full schema) | List of namespaced `ElasticsearchRole` managed resources. |
+| elasticsearchUsers | list | `[]` (see the commented example below for the full schema) | List of namespaced `ElasticsearchUser` managed resources. |
+| snapshotLifecycles | list | `[]` (see the commented example below for the full schema) | List of namespaced `SnapshotLifecycle` managed resources. |
+| snapshotRepositories | list | `[]` (see the commented example below for the full schema) | List of namespaced `SnapshotRepository` managed resources. |
+| providerConfigs | list | `[]` (see the commented example below for the full schema) | List of namespaced `ProviderConfig` resources used by the managed resources in this chart. |
+

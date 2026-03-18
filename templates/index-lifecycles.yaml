@@ -1,0 +1,1060 @@
+{{- range $index, $resource := .Values.indexLifecycles }}
+apiVersion: index.elasticstack.m.crossplane.io/v1alpha1
+kind: IndexLifecycle
+metadata:
+  name: {{ required (printf "%s[%d].name is required" "indexLifecycles" $index) $resource.name }}
+  namespace: {{ default $.Release.Namespace $resource.namespace }}
+  {{- if or $resource.annotations $resource.externalName }}
+  annotations:
+    {{- if $resource.externalName }}
+    crossplane.io/external-name: {{ $resource.externalName | quote }}
+    {{- end }}
+    {{- with $resource.annotations }}
+{{ toYaml . | indent 4 }}
+    {{- end }}
+  {{- end }}
+  {{- if $resource.labels }}
+  labels:
+{{ toYaml $resource.labels | indent 4 }}
+  {{- end }}
+{{- $spec := default (dict) $resource.spec }}
+spec:
+  {{- if hasKey $spec "forProvider" }}
+  {{- $indexLifecycles_spec_forProvider := default (dict) (index $spec "forProvider") }}
+  forProvider:
+    {{- if hasKey $indexLifecycles_spec_forProvider "cold" }}
+    {{- $indexLifecycles_spec_forProvider_cold := default (list) (index $indexLifecycles_spec_forProvider "cold") }}
+    cold:
+    {{- range $indexLifecycles_spec_forProvider_cold_item := $indexLifecycles_spec_forProvider_cold }}
+      -
+        {{- if hasKey $indexLifecycles_spec_forProvider_cold_item "allocate" }}
+        {{- $indexLifecycles_spec_forProvider_cold_allocate := default (list) (index $indexLifecycles_spec_forProvider_cold_item "allocate") }}
+        allocate:
+        {{- range $indexLifecycles_spec_forProvider_cold_allocate_item := $indexLifecycles_spec_forProvider_cold_allocate }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_cold_allocate_item "exclude" }}
+            exclude: {{ index $indexLifecycles_spec_forProvider_cold_allocate_item "exclude" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_cold_allocate_item "include" }}
+            include: {{ index $indexLifecycles_spec_forProvider_cold_allocate_item "include" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_cold_allocate_item "numberOfReplicas" }}
+            numberOfReplicas: {{ index $indexLifecycles_spec_forProvider_cold_allocate_item "numberOfReplicas" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_cold_allocate_item "require" }}
+            require: {{ index $indexLifecycles_spec_forProvider_cold_allocate_item "require" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_cold_allocate_item "totalShardsPerNode" }}
+            totalShardsPerNode: {{ index $indexLifecycles_spec_forProvider_cold_allocate_item "totalShardsPerNode" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_cold_item "downsample" }}
+        {{- $indexLifecycles_spec_forProvider_cold_downsample := default (list) (index $indexLifecycles_spec_forProvider_cold_item "downsample") }}
+        downsample:
+        {{- range $indexLifecycles_spec_forProvider_cold_downsample_item := $indexLifecycles_spec_forProvider_cold_downsample }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_cold_downsample_item "fixedInterval" }}
+            fixedInterval: {{ index $indexLifecycles_spec_forProvider_cold_downsample_item "fixedInterval" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_cold_downsample_item "waitTimeout" }}
+            waitTimeout: {{ index $indexLifecycles_spec_forProvider_cold_downsample_item "waitTimeout" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_cold_item "freeze" }}
+        {{- $indexLifecycles_spec_forProvider_cold_freeze := default (list) (index $indexLifecycles_spec_forProvider_cold_item "freeze") }}
+        freeze:
+        {{- range $indexLifecycles_spec_forProvider_cold_freeze_item := $indexLifecycles_spec_forProvider_cold_freeze }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_cold_freeze_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_forProvider_cold_freeze_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_cold_item "migrate" }}
+        {{- $indexLifecycles_spec_forProvider_cold_migrate := default (list) (index $indexLifecycles_spec_forProvider_cold_item "migrate") }}
+        migrate:
+        {{- range $indexLifecycles_spec_forProvider_cold_migrate_item := $indexLifecycles_spec_forProvider_cold_migrate }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_cold_migrate_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_forProvider_cold_migrate_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_cold_item "minAge" }}
+        minAge: {{ index $indexLifecycles_spec_forProvider_cold_item "minAge" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_cold_item "readonly" }}
+        {{- $indexLifecycles_spec_forProvider_cold_readonly := default (list) (index $indexLifecycles_spec_forProvider_cold_item "readonly") }}
+        readonly:
+        {{- range $indexLifecycles_spec_forProvider_cold_readonly_item := $indexLifecycles_spec_forProvider_cold_readonly }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_cold_readonly_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_forProvider_cold_readonly_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_cold_item "searchableSnapshot" }}
+        {{- $indexLifecycles_spec_forProvider_cold_searchableSnapshot := default (list) (index $indexLifecycles_spec_forProvider_cold_item "searchableSnapshot") }}
+        searchableSnapshot:
+        {{- range $indexLifecycles_spec_forProvider_cold_searchableSnapshot_item := $indexLifecycles_spec_forProvider_cold_searchableSnapshot }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_cold_searchableSnapshot_item "forceMergeIndex" }}
+            forceMergeIndex: {{ index $indexLifecycles_spec_forProvider_cold_searchableSnapshot_item "forceMergeIndex" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_cold_searchableSnapshot_item "snapshotRepository" }}
+            snapshotRepository: {{ index $indexLifecycles_spec_forProvider_cold_searchableSnapshot_item "snapshotRepository" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_cold_item "setPriority" }}
+        {{- $indexLifecycles_spec_forProvider_cold_setPriority := default (list) (index $indexLifecycles_spec_forProvider_cold_item "setPriority") }}
+        setPriority:
+        {{- range $indexLifecycles_spec_forProvider_cold_setPriority_item := $indexLifecycles_spec_forProvider_cold_setPriority }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_cold_setPriority_item "priority" }}
+            priority: {{ index $indexLifecycles_spec_forProvider_cold_setPriority_item "priority" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_cold_item "unfollow" }}
+        {{- $indexLifecycles_spec_forProvider_cold_unfollow := default (list) (index $indexLifecycles_spec_forProvider_cold_item "unfollow") }}
+        unfollow:
+        {{- range $indexLifecycles_spec_forProvider_cold_unfollow_item := $indexLifecycles_spec_forProvider_cold_unfollow }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_cold_unfollow_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_forProvider_cold_unfollow_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $indexLifecycles_spec_forProvider "delete" }}
+    {{- $indexLifecycles_spec_forProvider_delete := default (list) (index $indexLifecycles_spec_forProvider "delete") }}
+    delete:
+    {{- range $indexLifecycles_spec_forProvider_delete_item := $indexLifecycles_spec_forProvider_delete }}
+      -
+        {{- if hasKey $indexLifecycles_spec_forProvider_delete_item "delete" }}
+        {{- $indexLifecycles_spec_forProvider_delete_delete := default (list) (index $indexLifecycles_spec_forProvider_delete_item "delete") }}
+        delete:
+        {{- range $indexLifecycles_spec_forProvider_delete_delete_item := $indexLifecycles_spec_forProvider_delete_delete }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_delete_delete_item "deleteSearchableSnapshot" }}
+            deleteSearchableSnapshot: {{ index $indexLifecycles_spec_forProvider_delete_delete_item "deleteSearchableSnapshot" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_delete_item "minAge" }}
+        minAge: {{ index $indexLifecycles_spec_forProvider_delete_item "minAge" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_delete_item "waitForSnapshot" }}
+        {{- $indexLifecycles_spec_forProvider_delete_waitForSnapshot := default (list) (index $indexLifecycles_spec_forProvider_delete_item "waitForSnapshot") }}
+        waitForSnapshot:
+        {{- range $indexLifecycles_spec_forProvider_delete_waitForSnapshot_item := $indexLifecycles_spec_forProvider_delete_waitForSnapshot }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_delete_waitForSnapshot_item "policy" }}
+            policy: {{ index $indexLifecycles_spec_forProvider_delete_waitForSnapshot_item "policy" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $indexLifecycles_spec_forProvider "elasticsearchConnection" }}
+    {{- $indexLifecycles_spec_forProvider_elasticsearchConnection := default (list) (index $indexLifecycles_spec_forProvider "elasticsearchConnection") }}
+    elasticsearchConnection:
+    {{- range $indexLifecycles_spec_forProvider_elasticsearchConnection_item := $indexLifecycles_spec_forProvider_elasticsearchConnection }}
+      -
+        {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_item "apiKeySecretRef" }}
+        {{- $indexLifecycles_spec_forProvider_elasticsearchConnection_apiKeySecretRef := default (dict) (index $indexLifecycles_spec_forProvider_elasticsearchConnection_item "apiKeySecretRef") }}
+        apiKeySecretRef:
+          {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_apiKeySecretRef "key" }}
+          key: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_apiKeySecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_apiKeySecretRef "name" }}
+          name: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_apiKeySecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_item "bearerTokenSecretRef" }}
+        {{- $indexLifecycles_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef := default (dict) (index $indexLifecycles_spec_forProvider_elasticsearchConnection_item "bearerTokenSecretRef") }}
+        bearerTokenSecretRef:
+          {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "key" }}
+          key: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "name" }}
+          name: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_item "caData" }}
+        caData: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_item "caData" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_item "caFile" }}
+        caFile: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_item "caFile" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_item "certData" }}
+        certData: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_item "certData" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_item "certFile" }}
+        certFile: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_item "certFile" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_item "endpointsSecretRef" }}
+        {{- $indexLifecycles_spec_forProvider_elasticsearchConnection_endpointsSecretRef := default (list) (index $indexLifecycles_spec_forProvider_elasticsearchConnection_item "endpointsSecretRef") }}
+        endpointsSecretRef:
+        {{- range $indexLifecycles_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item := $indexLifecycles_spec_forProvider_elasticsearchConnection_endpointsSecretRef }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "key" }}
+            key: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "key" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "name" }}
+            name: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "name" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef" }}
+        {{- $indexLifecycles_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef := default (dict) (index $indexLifecycles_spec_forProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef") }}
+        esClientAuthenticationSecretRef:
+          {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" }}
+          key: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" }}
+          name: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_item "headersSecretRef" }}
+        {{- $indexLifecycles_spec_forProvider_elasticsearchConnection_headersSecretRef := default (dict) (index $indexLifecycles_spec_forProvider_elasticsearchConnection_item "headersSecretRef") }}
+        headersSecretRef:
+          {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_headersSecretRef "name" }}
+          name: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_headersSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_item "insecure" }}
+        insecure: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_item "insecure" }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_item "keyDataSecretRef" }}
+        {{- $indexLifecycles_spec_forProvider_elasticsearchConnection_keyDataSecretRef := default (dict) (index $indexLifecycles_spec_forProvider_elasticsearchConnection_item "keyDataSecretRef") }}
+        keyDataSecretRef:
+          {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_keyDataSecretRef "key" }}
+          key: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_keyDataSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_keyDataSecretRef "name" }}
+          name: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_keyDataSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_item "keyFile" }}
+        keyFile: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_item "keyFile" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_item "passwordSecretRef" }}
+        {{- $indexLifecycles_spec_forProvider_elasticsearchConnection_passwordSecretRef := default (dict) (index $indexLifecycles_spec_forProvider_elasticsearchConnection_item "passwordSecretRef") }}
+        passwordSecretRef:
+          {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_passwordSecretRef "key" }}
+          key: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_passwordSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_passwordSecretRef "name" }}
+          name: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_passwordSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_elasticsearchConnection_item "username" }}
+        username: {{ index $indexLifecycles_spec_forProvider_elasticsearchConnection_item "username" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $indexLifecycles_spec_forProvider "frozen" }}
+    {{- $indexLifecycles_spec_forProvider_frozen := default (list) (index $indexLifecycles_spec_forProvider "frozen") }}
+    frozen:
+    {{- range $indexLifecycles_spec_forProvider_frozen_item := $indexLifecycles_spec_forProvider_frozen }}
+      -
+        {{- if hasKey $indexLifecycles_spec_forProvider_frozen_item "minAge" }}
+        minAge: {{ index $indexLifecycles_spec_forProvider_frozen_item "minAge" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_frozen_item "searchableSnapshot" }}
+        {{- $indexLifecycles_spec_forProvider_frozen_searchableSnapshot := default (list) (index $indexLifecycles_spec_forProvider_frozen_item "searchableSnapshot") }}
+        searchableSnapshot:
+        {{- range $indexLifecycles_spec_forProvider_frozen_searchableSnapshot_item := $indexLifecycles_spec_forProvider_frozen_searchableSnapshot }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_frozen_searchableSnapshot_item "forceMergeIndex" }}
+            forceMergeIndex: {{ index $indexLifecycles_spec_forProvider_frozen_searchableSnapshot_item "forceMergeIndex" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_frozen_searchableSnapshot_item "snapshotRepository" }}
+            snapshotRepository: {{ index $indexLifecycles_spec_forProvider_frozen_searchableSnapshot_item "snapshotRepository" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $indexLifecycles_spec_forProvider "hot" }}
+    {{- $indexLifecycles_spec_forProvider_hot := default (list) (index $indexLifecycles_spec_forProvider "hot") }}
+    hot:
+    {{- range $indexLifecycles_spec_forProvider_hot_item := $indexLifecycles_spec_forProvider_hot }}
+      -
+        {{- if hasKey $indexLifecycles_spec_forProvider_hot_item "downsample" }}
+        {{- $indexLifecycles_spec_forProvider_hot_downsample := default (list) (index $indexLifecycles_spec_forProvider_hot_item "downsample") }}
+        downsample:
+        {{- range $indexLifecycles_spec_forProvider_hot_downsample_item := $indexLifecycles_spec_forProvider_hot_downsample }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_downsample_item "fixedInterval" }}
+            fixedInterval: {{ index $indexLifecycles_spec_forProvider_hot_downsample_item "fixedInterval" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_downsample_item "waitTimeout" }}
+            waitTimeout: {{ index $indexLifecycles_spec_forProvider_hot_downsample_item "waitTimeout" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_hot_item "forcemerge" }}
+        {{- $indexLifecycles_spec_forProvider_hot_forcemerge := default (list) (index $indexLifecycles_spec_forProvider_hot_item "forcemerge") }}
+        forcemerge:
+        {{- range $indexLifecycles_spec_forProvider_hot_forcemerge_item := $indexLifecycles_spec_forProvider_hot_forcemerge }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_forcemerge_item "indexCodec" }}
+            indexCodec: {{ index $indexLifecycles_spec_forProvider_hot_forcemerge_item "indexCodec" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_forcemerge_item "maxNumSegments" }}
+            maxNumSegments: {{ index $indexLifecycles_spec_forProvider_hot_forcemerge_item "maxNumSegments" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_hot_item "minAge" }}
+        minAge: {{ index $indexLifecycles_spec_forProvider_hot_item "minAge" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_hot_item "readonly" }}
+        {{- $indexLifecycles_spec_forProvider_hot_readonly := default (list) (index $indexLifecycles_spec_forProvider_hot_item "readonly") }}
+        readonly:
+        {{- range $indexLifecycles_spec_forProvider_hot_readonly_item := $indexLifecycles_spec_forProvider_hot_readonly }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_readonly_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_forProvider_hot_readonly_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_hot_item "rollover" }}
+        {{- $indexLifecycles_spec_forProvider_hot_rollover := default (list) (index $indexLifecycles_spec_forProvider_hot_item "rollover") }}
+        rollover:
+        {{- range $indexLifecycles_spec_forProvider_hot_rollover_item := $indexLifecycles_spec_forProvider_hot_rollover }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_rollover_item "maxAge" }}
+            maxAge: {{ index $indexLifecycles_spec_forProvider_hot_rollover_item "maxAge" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_rollover_item "maxDocs" }}
+            maxDocs: {{ index $indexLifecycles_spec_forProvider_hot_rollover_item "maxDocs" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_rollover_item "maxPrimaryShardDocs" }}
+            maxPrimaryShardDocs: {{ index $indexLifecycles_spec_forProvider_hot_rollover_item "maxPrimaryShardDocs" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_rollover_item "maxPrimaryShardSize" }}
+            maxPrimaryShardSize: {{ index $indexLifecycles_spec_forProvider_hot_rollover_item "maxPrimaryShardSize" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_rollover_item "maxSize" }}
+            maxSize: {{ index $indexLifecycles_spec_forProvider_hot_rollover_item "maxSize" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_rollover_item "minAge" }}
+            minAge: {{ index $indexLifecycles_spec_forProvider_hot_rollover_item "minAge" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_rollover_item "minDocs" }}
+            minDocs: {{ index $indexLifecycles_spec_forProvider_hot_rollover_item "minDocs" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_rollover_item "minPrimaryShardDocs" }}
+            minPrimaryShardDocs: {{ index $indexLifecycles_spec_forProvider_hot_rollover_item "minPrimaryShardDocs" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_rollover_item "minPrimaryShardSize" }}
+            minPrimaryShardSize: {{ index $indexLifecycles_spec_forProvider_hot_rollover_item "minPrimaryShardSize" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_rollover_item "minSize" }}
+            minSize: {{ index $indexLifecycles_spec_forProvider_hot_rollover_item "minSize" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_hot_item "searchableSnapshot" }}
+        {{- $indexLifecycles_spec_forProvider_hot_searchableSnapshot := default (list) (index $indexLifecycles_spec_forProvider_hot_item "searchableSnapshot") }}
+        searchableSnapshot:
+        {{- range $indexLifecycles_spec_forProvider_hot_searchableSnapshot_item := $indexLifecycles_spec_forProvider_hot_searchableSnapshot }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_searchableSnapshot_item "forceMergeIndex" }}
+            forceMergeIndex: {{ index $indexLifecycles_spec_forProvider_hot_searchableSnapshot_item "forceMergeIndex" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_searchableSnapshot_item "snapshotRepository" }}
+            snapshotRepository: {{ index $indexLifecycles_spec_forProvider_hot_searchableSnapshot_item "snapshotRepository" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_hot_item "setPriority" }}
+        {{- $indexLifecycles_spec_forProvider_hot_setPriority := default (list) (index $indexLifecycles_spec_forProvider_hot_item "setPriority") }}
+        setPriority:
+        {{- range $indexLifecycles_spec_forProvider_hot_setPriority_item := $indexLifecycles_spec_forProvider_hot_setPriority }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_setPriority_item "priority" }}
+            priority: {{ index $indexLifecycles_spec_forProvider_hot_setPriority_item "priority" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_hot_item "shrink" }}
+        {{- $indexLifecycles_spec_forProvider_hot_shrink := default (list) (index $indexLifecycles_spec_forProvider_hot_item "shrink") }}
+        shrink:
+        {{- range $indexLifecycles_spec_forProvider_hot_shrink_item := $indexLifecycles_spec_forProvider_hot_shrink }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_shrink_item "allowWriteAfterShrink" }}
+            allowWriteAfterShrink: {{ index $indexLifecycles_spec_forProvider_hot_shrink_item "allowWriteAfterShrink" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_shrink_item "maxPrimaryShardSize" }}
+            maxPrimaryShardSize: {{ index $indexLifecycles_spec_forProvider_hot_shrink_item "maxPrimaryShardSize" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_shrink_item "numberOfShards" }}
+            numberOfShards: {{ index $indexLifecycles_spec_forProvider_hot_shrink_item "numberOfShards" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_hot_item "unfollow" }}
+        {{- $indexLifecycles_spec_forProvider_hot_unfollow := default (list) (index $indexLifecycles_spec_forProvider_hot_item "unfollow") }}
+        unfollow:
+        {{- range $indexLifecycles_spec_forProvider_hot_unfollow_item := $indexLifecycles_spec_forProvider_hot_unfollow }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_hot_unfollow_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_forProvider_hot_unfollow_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $indexLifecycles_spec_forProvider "metadata" }}
+    metadata: {{ index $indexLifecycles_spec_forProvider "metadata" | quote }}
+    {{- end }}
+    {{- if hasKey $indexLifecycles_spec_forProvider "warm" }}
+    {{- $indexLifecycles_spec_forProvider_warm := default (list) (index $indexLifecycles_spec_forProvider "warm") }}
+    warm:
+    {{- range $indexLifecycles_spec_forProvider_warm_item := $indexLifecycles_spec_forProvider_warm }}
+      -
+        {{- if hasKey $indexLifecycles_spec_forProvider_warm_item "allocate" }}
+        {{- $indexLifecycles_spec_forProvider_warm_allocate := default (list) (index $indexLifecycles_spec_forProvider_warm_item "allocate") }}
+        allocate:
+        {{- range $indexLifecycles_spec_forProvider_warm_allocate_item := $indexLifecycles_spec_forProvider_warm_allocate }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_warm_allocate_item "exclude" }}
+            exclude: {{ index $indexLifecycles_spec_forProvider_warm_allocate_item "exclude" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_warm_allocate_item "include" }}
+            include: {{ index $indexLifecycles_spec_forProvider_warm_allocate_item "include" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_warm_allocate_item "numberOfReplicas" }}
+            numberOfReplicas: {{ index $indexLifecycles_spec_forProvider_warm_allocate_item "numberOfReplicas" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_warm_allocate_item "require" }}
+            require: {{ index $indexLifecycles_spec_forProvider_warm_allocate_item "require" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_warm_allocate_item "totalShardsPerNode" }}
+            totalShardsPerNode: {{ index $indexLifecycles_spec_forProvider_warm_allocate_item "totalShardsPerNode" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_warm_item "downsample" }}
+        {{- $indexLifecycles_spec_forProvider_warm_downsample := default (list) (index $indexLifecycles_spec_forProvider_warm_item "downsample") }}
+        downsample:
+        {{- range $indexLifecycles_spec_forProvider_warm_downsample_item := $indexLifecycles_spec_forProvider_warm_downsample }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_warm_downsample_item "fixedInterval" }}
+            fixedInterval: {{ index $indexLifecycles_spec_forProvider_warm_downsample_item "fixedInterval" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_warm_downsample_item "waitTimeout" }}
+            waitTimeout: {{ index $indexLifecycles_spec_forProvider_warm_downsample_item "waitTimeout" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_warm_item "forcemerge" }}
+        {{- $indexLifecycles_spec_forProvider_warm_forcemerge := default (list) (index $indexLifecycles_spec_forProvider_warm_item "forcemerge") }}
+        forcemerge:
+        {{- range $indexLifecycles_spec_forProvider_warm_forcemerge_item := $indexLifecycles_spec_forProvider_warm_forcemerge }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_warm_forcemerge_item "indexCodec" }}
+            indexCodec: {{ index $indexLifecycles_spec_forProvider_warm_forcemerge_item "indexCodec" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_warm_forcemerge_item "maxNumSegments" }}
+            maxNumSegments: {{ index $indexLifecycles_spec_forProvider_warm_forcemerge_item "maxNumSegments" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_warm_item "migrate" }}
+        {{- $indexLifecycles_spec_forProvider_warm_migrate := default (list) (index $indexLifecycles_spec_forProvider_warm_item "migrate") }}
+        migrate:
+        {{- range $indexLifecycles_spec_forProvider_warm_migrate_item := $indexLifecycles_spec_forProvider_warm_migrate }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_warm_migrate_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_forProvider_warm_migrate_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_warm_item "minAge" }}
+        minAge: {{ index $indexLifecycles_spec_forProvider_warm_item "minAge" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_warm_item "readonly" }}
+        {{- $indexLifecycles_spec_forProvider_warm_readonly := default (list) (index $indexLifecycles_spec_forProvider_warm_item "readonly") }}
+        readonly:
+        {{- range $indexLifecycles_spec_forProvider_warm_readonly_item := $indexLifecycles_spec_forProvider_warm_readonly }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_warm_readonly_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_forProvider_warm_readonly_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_warm_item "setPriority" }}
+        {{- $indexLifecycles_spec_forProvider_warm_setPriority := default (list) (index $indexLifecycles_spec_forProvider_warm_item "setPriority") }}
+        setPriority:
+        {{- range $indexLifecycles_spec_forProvider_warm_setPriority_item := $indexLifecycles_spec_forProvider_warm_setPriority }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_warm_setPriority_item "priority" }}
+            priority: {{ index $indexLifecycles_spec_forProvider_warm_setPriority_item "priority" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_warm_item "shrink" }}
+        {{- $indexLifecycles_spec_forProvider_warm_shrink := default (list) (index $indexLifecycles_spec_forProvider_warm_item "shrink") }}
+        shrink:
+        {{- range $indexLifecycles_spec_forProvider_warm_shrink_item := $indexLifecycles_spec_forProvider_warm_shrink }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_warm_shrink_item "allowWriteAfterShrink" }}
+            allowWriteAfterShrink: {{ index $indexLifecycles_spec_forProvider_warm_shrink_item "allowWriteAfterShrink" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_warm_shrink_item "maxPrimaryShardSize" }}
+            maxPrimaryShardSize: {{ index $indexLifecycles_spec_forProvider_warm_shrink_item "maxPrimaryShardSize" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_forProvider_warm_shrink_item "numberOfShards" }}
+            numberOfShards: {{ index $indexLifecycles_spec_forProvider_warm_shrink_item "numberOfShards" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_forProvider_warm_item "unfollow" }}
+        {{- $indexLifecycles_spec_forProvider_warm_unfollow := default (list) (index $indexLifecycles_spec_forProvider_warm_item "unfollow") }}
+        unfollow:
+        {{- range $indexLifecycles_spec_forProvider_warm_unfollow_item := $indexLifecycles_spec_forProvider_warm_unfollow }}
+          -
+            {{- if hasKey $indexLifecycles_spec_forProvider_warm_unfollow_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_forProvider_warm_unfollow_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- if hasKey $spec "initProvider" }}
+  {{- $indexLifecycles_spec_initProvider := default (dict) (index $spec "initProvider") }}
+  initProvider:
+    {{- if hasKey $indexLifecycles_spec_initProvider "cold" }}
+    {{- $indexLifecycles_spec_initProvider_cold := default (list) (index $indexLifecycles_spec_initProvider "cold") }}
+    cold:
+    {{- range $indexLifecycles_spec_initProvider_cold_item := $indexLifecycles_spec_initProvider_cold }}
+      -
+        {{- if hasKey $indexLifecycles_spec_initProvider_cold_item "allocate" }}
+        {{- $indexLifecycles_spec_initProvider_cold_allocate := default (list) (index $indexLifecycles_spec_initProvider_cold_item "allocate") }}
+        allocate:
+        {{- range $indexLifecycles_spec_initProvider_cold_allocate_item := $indexLifecycles_spec_initProvider_cold_allocate }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_cold_allocate_item "exclude" }}
+            exclude: {{ index $indexLifecycles_spec_initProvider_cold_allocate_item "exclude" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_cold_allocate_item "include" }}
+            include: {{ index $indexLifecycles_spec_initProvider_cold_allocate_item "include" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_cold_allocate_item "numberOfReplicas" }}
+            numberOfReplicas: {{ index $indexLifecycles_spec_initProvider_cold_allocate_item "numberOfReplicas" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_cold_allocate_item "require" }}
+            require: {{ index $indexLifecycles_spec_initProvider_cold_allocate_item "require" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_cold_allocate_item "totalShardsPerNode" }}
+            totalShardsPerNode: {{ index $indexLifecycles_spec_initProvider_cold_allocate_item "totalShardsPerNode" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_cold_item "downsample" }}
+        {{- $indexLifecycles_spec_initProvider_cold_downsample := default (list) (index $indexLifecycles_spec_initProvider_cold_item "downsample") }}
+        downsample:
+        {{- range $indexLifecycles_spec_initProvider_cold_downsample_item := $indexLifecycles_spec_initProvider_cold_downsample }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_cold_downsample_item "fixedInterval" }}
+            fixedInterval: {{ index $indexLifecycles_spec_initProvider_cold_downsample_item "fixedInterval" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_cold_downsample_item "waitTimeout" }}
+            waitTimeout: {{ index $indexLifecycles_spec_initProvider_cold_downsample_item "waitTimeout" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_cold_item "freeze" }}
+        {{- $indexLifecycles_spec_initProvider_cold_freeze := default (list) (index $indexLifecycles_spec_initProvider_cold_item "freeze") }}
+        freeze:
+        {{- range $indexLifecycles_spec_initProvider_cold_freeze_item := $indexLifecycles_spec_initProvider_cold_freeze }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_cold_freeze_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_initProvider_cold_freeze_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_cold_item "migrate" }}
+        {{- $indexLifecycles_spec_initProvider_cold_migrate := default (list) (index $indexLifecycles_spec_initProvider_cold_item "migrate") }}
+        migrate:
+        {{- range $indexLifecycles_spec_initProvider_cold_migrate_item := $indexLifecycles_spec_initProvider_cold_migrate }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_cold_migrate_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_initProvider_cold_migrate_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_cold_item "minAge" }}
+        minAge: {{ index $indexLifecycles_spec_initProvider_cold_item "minAge" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_cold_item "readonly" }}
+        {{- $indexLifecycles_spec_initProvider_cold_readonly := default (list) (index $indexLifecycles_spec_initProvider_cold_item "readonly") }}
+        readonly:
+        {{- range $indexLifecycles_spec_initProvider_cold_readonly_item := $indexLifecycles_spec_initProvider_cold_readonly }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_cold_readonly_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_initProvider_cold_readonly_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_cold_item "searchableSnapshot" }}
+        {{- $indexLifecycles_spec_initProvider_cold_searchableSnapshot := default (list) (index $indexLifecycles_spec_initProvider_cold_item "searchableSnapshot") }}
+        searchableSnapshot:
+        {{- range $indexLifecycles_spec_initProvider_cold_searchableSnapshot_item := $indexLifecycles_spec_initProvider_cold_searchableSnapshot }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_cold_searchableSnapshot_item "forceMergeIndex" }}
+            forceMergeIndex: {{ index $indexLifecycles_spec_initProvider_cold_searchableSnapshot_item "forceMergeIndex" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_cold_searchableSnapshot_item "snapshotRepository" }}
+            snapshotRepository: {{ index $indexLifecycles_spec_initProvider_cold_searchableSnapshot_item "snapshotRepository" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_cold_item "setPriority" }}
+        {{- $indexLifecycles_spec_initProvider_cold_setPriority := default (list) (index $indexLifecycles_spec_initProvider_cold_item "setPriority") }}
+        setPriority:
+        {{- range $indexLifecycles_spec_initProvider_cold_setPriority_item := $indexLifecycles_spec_initProvider_cold_setPriority }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_cold_setPriority_item "priority" }}
+            priority: {{ index $indexLifecycles_spec_initProvider_cold_setPriority_item "priority" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_cold_item "unfollow" }}
+        {{- $indexLifecycles_spec_initProvider_cold_unfollow := default (list) (index $indexLifecycles_spec_initProvider_cold_item "unfollow") }}
+        unfollow:
+        {{- range $indexLifecycles_spec_initProvider_cold_unfollow_item := $indexLifecycles_spec_initProvider_cold_unfollow }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_cold_unfollow_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_initProvider_cold_unfollow_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $indexLifecycles_spec_initProvider "delete" }}
+    {{- $indexLifecycles_spec_initProvider_delete := default (list) (index $indexLifecycles_spec_initProvider "delete") }}
+    delete:
+    {{- range $indexLifecycles_spec_initProvider_delete_item := $indexLifecycles_spec_initProvider_delete }}
+      -
+        {{- if hasKey $indexLifecycles_spec_initProvider_delete_item "delete" }}
+        {{- $indexLifecycles_spec_initProvider_delete_delete := default (list) (index $indexLifecycles_spec_initProvider_delete_item "delete") }}
+        delete:
+        {{- range $indexLifecycles_spec_initProvider_delete_delete_item := $indexLifecycles_spec_initProvider_delete_delete }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_delete_delete_item "deleteSearchableSnapshot" }}
+            deleteSearchableSnapshot: {{ index $indexLifecycles_spec_initProvider_delete_delete_item "deleteSearchableSnapshot" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_delete_item "minAge" }}
+        minAge: {{ index $indexLifecycles_spec_initProvider_delete_item "minAge" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_delete_item "waitForSnapshot" }}
+        {{- $indexLifecycles_spec_initProvider_delete_waitForSnapshot := default (list) (index $indexLifecycles_spec_initProvider_delete_item "waitForSnapshot") }}
+        waitForSnapshot:
+        {{- range $indexLifecycles_spec_initProvider_delete_waitForSnapshot_item := $indexLifecycles_spec_initProvider_delete_waitForSnapshot }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_delete_waitForSnapshot_item "policy" }}
+            policy: {{ index $indexLifecycles_spec_initProvider_delete_waitForSnapshot_item "policy" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $indexLifecycles_spec_initProvider "elasticsearchConnection" }}
+    {{- $indexLifecycles_spec_initProvider_elasticsearchConnection := default (list) (index $indexLifecycles_spec_initProvider "elasticsearchConnection") }}
+    elasticsearchConnection:
+    {{- range $indexLifecycles_spec_initProvider_elasticsearchConnection_item := $indexLifecycles_spec_initProvider_elasticsearchConnection }}
+      -
+        {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_item "apiKeySecretRef" }}
+        {{- $indexLifecycles_spec_initProvider_elasticsearchConnection_apiKeySecretRef := default (dict) (index $indexLifecycles_spec_initProvider_elasticsearchConnection_item "apiKeySecretRef") }}
+        apiKeySecretRef:
+          {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_apiKeySecretRef "key" }}
+          key: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_apiKeySecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_apiKeySecretRef "name" }}
+          name: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_apiKeySecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_item "bearerTokenSecretRef" }}
+        {{- $indexLifecycles_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef := default (dict) (index $indexLifecycles_spec_initProvider_elasticsearchConnection_item "bearerTokenSecretRef") }}
+        bearerTokenSecretRef:
+          {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "key" }}
+          key: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "name" }}
+          name: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_item "caData" }}
+        caData: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_item "caData" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_item "caFile" }}
+        caFile: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_item "caFile" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_item "certData" }}
+        certData: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_item "certData" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_item "certFile" }}
+        certFile: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_item "certFile" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_item "endpointsSecretRef" }}
+        {{- $indexLifecycles_spec_initProvider_elasticsearchConnection_endpointsSecretRef := default (list) (index $indexLifecycles_spec_initProvider_elasticsearchConnection_item "endpointsSecretRef") }}
+        endpointsSecretRef:
+          {{- toYaml $indexLifecycles_spec_initProvider_elasticsearchConnection_endpointsSecretRef | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef" }}
+        {{- $indexLifecycles_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef := default (dict) (index $indexLifecycles_spec_initProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef") }}
+        esClientAuthenticationSecretRef:
+          {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" }}
+          key: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" }}
+          name: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_item "headersSecretRef" }}
+        headersSecretRef:
+          {{- toYaml (default (dict) (index $indexLifecycles_spec_initProvider_elasticsearchConnection_item "headersSecretRef")) | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_item "insecure" }}
+        insecure: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_item "insecure" }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_item "keyDataSecretRef" }}
+        {{- $indexLifecycles_spec_initProvider_elasticsearchConnection_keyDataSecretRef := default (dict) (index $indexLifecycles_spec_initProvider_elasticsearchConnection_item "keyDataSecretRef") }}
+        keyDataSecretRef:
+          {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_keyDataSecretRef "key" }}
+          key: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_keyDataSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_keyDataSecretRef "name" }}
+          name: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_keyDataSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_item "keyFile" }}
+        keyFile: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_item "keyFile" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_item "passwordSecretRef" }}
+        {{- $indexLifecycles_spec_initProvider_elasticsearchConnection_passwordSecretRef := default (dict) (index $indexLifecycles_spec_initProvider_elasticsearchConnection_item "passwordSecretRef") }}
+        passwordSecretRef:
+          {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_passwordSecretRef "key" }}
+          key: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_passwordSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_passwordSecretRef "name" }}
+          name: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_passwordSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_elasticsearchConnection_item "username" }}
+        username: {{ index $indexLifecycles_spec_initProvider_elasticsearchConnection_item "username" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $indexLifecycles_spec_initProvider "frozen" }}
+    {{- $indexLifecycles_spec_initProvider_frozen := default (list) (index $indexLifecycles_spec_initProvider "frozen") }}
+    frozen:
+    {{- range $indexLifecycles_spec_initProvider_frozen_item := $indexLifecycles_spec_initProvider_frozen }}
+      -
+        {{- if hasKey $indexLifecycles_spec_initProvider_frozen_item "minAge" }}
+        minAge: {{ index $indexLifecycles_spec_initProvider_frozen_item "minAge" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_frozen_item "searchableSnapshot" }}
+        {{- $indexLifecycles_spec_initProvider_frozen_searchableSnapshot := default (list) (index $indexLifecycles_spec_initProvider_frozen_item "searchableSnapshot") }}
+        searchableSnapshot:
+        {{- range $indexLifecycles_spec_initProvider_frozen_searchableSnapshot_item := $indexLifecycles_spec_initProvider_frozen_searchableSnapshot }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_frozen_searchableSnapshot_item "forceMergeIndex" }}
+            forceMergeIndex: {{ index $indexLifecycles_spec_initProvider_frozen_searchableSnapshot_item "forceMergeIndex" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_frozen_searchableSnapshot_item "snapshotRepository" }}
+            snapshotRepository: {{ index $indexLifecycles_spec_initProvider_frozen_searchableSnapshot_item "snapshotRepository" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $indexLifecycles_spec_initProvider "hot" }}
+    {{- $indexLifecycles_spec_initProvider_hot := default (list) (index $indexLifecycles_spec_initProvider "hot") }}
+    hot:
+    {{- range $indexLifecycles_spec_initProvider_hot_item := $indexLifecycles_spec_initProvider_hot }}
+      -
+        {{- if hasKey $indexLifecycles_spec_initProvider_hot_item "downsample" }}
+        {{- $indexLifecycles_spec_initProvider_hot_downsample := default (list) (index $indexLifecycles_spec_initProvider_hot_item "downsample") }}
+        downsample:
+        {{- range $indexLifecycles_spec_initProvider_hot_downsample_item := $indexLifecycles_spec_initProvider_hot_downsample }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_downsample_item "fixedInterval" }}
+            fixedInterval: {{ index $indexLifecycles_spec_initProvider_hot_downsample_item "fixedInterval" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_downsample_item "waitTimeout" }}
+            waitTimeout: {{ index $indexLifecycles_spec_initProvider_hot_downsample_item "waitTimeout" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_hot_item "forcemerge" }}
+        {{- $indexLifecycles_spec_initProvider_hot_forcemerge := default (list) (index $indexLifecycles_spec_initProvider_hot_item "forcemerge") }}
+        forcemerge:
+        {{- range $indexLifecycles_spec_initProvider_hot_forcemerge_item := $indexLifecycles_spec_initProvider_hot_forcemerge }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_forcemerge_item "indexCodec" }}
+            indexCodec: {{ index $indexLifecycles_spec_initProvider_hot_forcemerge_item "indexCodec" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_forcemerge_item "maxNumSegments" }}
+            maxNumSegments: {{ index $indexLifecycles_spec_initProvider_hot_forcemerge_item "maxNumSegments" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_hot_item "minAge" }}
+        minAge: {{ index $indexLifecycles_spec_initProvider_hot_item "minAge" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_hot_item "readonly" }}
+        {{- $indexLifecycles_spec_initProvider_hot_readonly := default (list) (index $indexLifecycles_spec_initProvider_hot_item "readonly") }}
+        readonly:
+        {{- range $indexLifecycles_spec_initProvider_hot_readonly_item := $indexLifecycles_spec_initProvider_hot_readonly }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_readonly_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_initProvider_hot_readonly_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_hot_item "rollover" }}
+        {{- $indexLifecycles_spec_initProvider_hot_rollover := default (list) (index $indexLifecycles_spec_initProvider_hot_item "rollover") }}
+        rollover:
+        {{- range $indexLifecycles_spec_initProvider_hot_rollover_item := $indexLifecycles_spec_initProvider_hot_rollover }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_rollover_item "maxAge" }}
+            maxAge: {{ index $indexLifecycles_spec_initProvider_hot_rollover_item "maxAge" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_rollover_item "maxDocs" }}
+            maxDocs: {{ index $indexLifecycles_spec_initProvider_hot_rollover_item "maxDocs" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_rollover_item "maxPrimaryShardDocs" }}
+            maxPrimaryShardDocs: {{ index $indexLifecycles_spec_initProvider_hot_rollover_item "maxPrimaryShardDocs" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_rollover_item "maxPrimaryShardSize" }}
+            maxPrimaryShardSize: {{ index $indexLifecycles_spec_initProvider_hot_rollover_item "maxPrimaryShardSize" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_rollover_item "maxSize" }}
+            maxSize: {{ index $indexLifecycles_spec_initProvider_hot_rollover_item "maxSize" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_rollover_item "minAge" }}
+            minAge: {{ index $indexLifecycles_spec_initProvider_hot_rollover_item "minAge" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_rollover_item "minDocs" }}
+            minDocs: {{ index $indexLifecycles_spec_initProvider_hot_rollover_item "minDocs" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_rollover_item "minPrimaryShardDocs" }}
+            minPrimaryShardDocs: {{ index $indexLifecycles_spec_initProvider_hot_rollover_item "minPrimaryShardDocs" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_rollover_item "minPrimaryShardSize" }}
+            minPrimaryShardSize: {{ index $indexLifecycles_spec_initProvider_hot_rollover_item "minPrimaryShardSize" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_rollover_item "minSize" }}
+            minSize: {{ index $indexLifecycles_spec_initProvider_hot_rollover_item "minSize" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_hot_item "searchableSnapshot" }}
+        {{- $indexLifecycles_spec_initProvider_hot_searchableSnapshot := default (list) (index $indexLifecycles_spec_initProvider_hot_item "searchableSnapshot") }}
+        searchableSnapshot:
+        {{- range $indexLifecycles_spec_initProvider_hot_searchableSnapshot_item := $indexLifecycles_spec_initProvider_hot_searchableSnapshot }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_searchableSnapshot_item "forceMergeIndex" }}
+            forceMergeIndex: {{ index $indexLifecycles_spec_initProvider_hot_searchableSnapshot_item "forceMergeIndex" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_searchableSnapshot_item "snapshotRepository" }}
+            snapshotRepository: {{ index $indexLifecycles_spec_initProvider_hot_searchableSnapshot_item "snapshotRepository" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_hot_item "setPriority" }}
+        {{- $indexLifecycles_spec_initProvider_hot_setPriority := default (list) (index $indexLifecycles_spec_initProvider_hot_item "setPriority") }}
+        setPriority:
+        {{- range $indexLifecycles_spec_initProvider_hot_setPriority_item := $indexLifecycles_spec_initProvider_hot_setPriority }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_setPriority_item "priority" }}
+            priority: {{ index $indexLifecycles_spec_initProvider_hot_setPriority_item "priority" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_hot_item "shrink" }}
+        {{- $indexLifecycles_spec_initProvider_hot_shrink := default (list) (index $indexLifecycles_spec_initProvider_hot_item "shrink") }}
+        shrink:
+        {{- range $indexLifecycles_spec_initProvider_hot_shrink_item := $indexLifecycles_spec_initProvider_hot_shrink }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_shrink_item "allowWriteAfterShrink" }}
+            allowWriteAfterShrink: {{ index $indexLifecycles_spec_initProvider_hot_shrink_item "allowWriteAfterShrink" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_shrink_item "maxPrimaryShardSize" }}
+            maxPrimaryShardSize: {{ index $indexLifecycles_spec_initProvider_hot_shrink_item "maxPrimaryShardSize" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_shrink_item "numberOfShards" }}
+            numberOfShards: {{ index $indexLifecycles_spec_initProvider_hot_shrink_item "numberOfShards" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_hot_item "unfollow" }}
+        {{- $indexLifecycles_spec_initProvider_hot_unfollow := default (list) (index $indexLifecycles_spec_initProvider_hot_item "unfollow") }}
+        unfollow:
+        {{- range $indexLifecycles_spec_initProvider_hot_unfollow_item := $indexLifecycles_spec_initProvider_hot_unfollow }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_hot_unfollow_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_initProvider_hot_unfollow_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $indexLifecycles_spec_initProvider "metadata" }}
+    metadata: {{ index $indexLifecycles_spec_initProvider "metadata" | quote }}
+    {{- end }}
+    {{- if hasKey $indexLifecycles_spec_initProvider "warm" }}
+    {{- $indexLifecycles_spec_initProvider_warm := default (list) (index $indexLifecycles_spec_initProvider "warm") }}
+    warm:
+    {{- range $indexLifecycles_spec_initProvider_warm_item := $indexLifecycles_spec_initProvider_warm }}
+      -
+        {{- if hasKey $indexLifecycles_spec_initProvider_warm_item "allocate" }}
+        {{- $indexLifecycles_spec_initProvider_warm_allocate := default (list) (index $indexLifecycles_spec_initProvider_warm_item "allocate") }}
+        allocate:
+        {{- range $indexLifecycles_spec_initProvider_warm_allocate_item := $indexLifecycles_spec_initProvider_warm_allocate }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_warm_allocate_item "exclude" }}
+            exclude: {{ index $indexLifecycles_spec_initProvider_warm_allocate_item "exclude" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_warm_allocate_item "include" }}
+            include: {{ index $indexLifecycles_spec_initProvider_warm_allocate_item "include" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_warm_allocate_item "numberOfReplicas" }}
+            numberOfReplicas: {{ index $indexLifecycles_spec_initProvider_warm_allocate_item "numberOfReplicas" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_warm_allocate_item "require" }}
+            require: {{ index $indexLifecycles_spec_initProvider_warm_allocate_item "require" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_warm_allocate_item "totalShardsPerNode" }}
+            totalShardsPerNode: {{ index $indexLifecycles_spec_initProvider_warm_allocate_item "totalShardsPerNode" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_warm_item "downsample" }}
+        {{- $indexLifecycles_spec_initProvider_warm_downsample := default (list) (index $indexLifecycles_spec_initProvider_warm_item "downsample") }}
+        downsample:
+        {{- range $indexLifecycles_spec_initProvider_warm_downsample_item := $indexLifecycles_spec_initProvider_warm_downsample }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_warm_downsample_item "fixedInterval" }}
+            fixedInterval: {{ index $indexLifecycles_spec_initProvider_warm_downsample_item "fixedInterval" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_warm_downsample_item "waitTimeout" }}
+            waitTimeout: {{ index $indexLifecycles_spec_initProvider_warm_downsample_item "waitTimeout" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_warm_item "forcemerge" }}
+        {{- $indexLifecycles_spec_initProvider_warm_forcemerge := default (list) (index $indexLifecycles_spec_initProvider_warm_item "forcemerge") }}
+        forcemerge:
+        {{- range $indexLifecycles_spec_initProvider_warm_forcemerge_item := $indexLifecycles_spec_initProvider_warm_forcemerge }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_warm_forcemerge_item "indexCodec" }}
+            indexCodec: {{ index $indexLifecycles_spec_initProvider_warm_forcemerge_item "indexCodec" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_warm_forcemerge_item "maxNumSegments" }}
+            maxNumSegments: {{ index $indexLifecycles_spec_initProvider_warm_forcemerge_item "maxNumSegments" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_warm_item "migrate" }}
+        {{- $indexLifecycles_spec_initProvider_warm_migrate := default (list) (index $indexLifecycles_spec_initProvider_warm_item "migrate") }}
+        migrate:
+        {{- range $indexLifecycles_spec_initProvider_warm_migrate_item := $indexLifecycles_spec_initProvider_warm_migrate }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_warm_migrate_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_initProvider_warm_migrate_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_warm_item "minAge" }}
+        minAge: {{ index $indexLifecycles_spec_initProvider_warm_item "minAge" | quote }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_warm_item "readonly" }}
+        {{- $indexLifecycles_spec_initProvider_warm_readonly := default (list) (index $indexLifecycles_spec_initProvider_warm_item "readonly") }}
+        readonly:
+        {{- range $indexLifecycles_spec_initProvider_warm_readonly_item := $indexLifecycles_spec_initProvider_warm_readonly }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_warm_readonly_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_initProvider_warm_readonly_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_warm_item "setPriority" }}
+        {{- $indexLifecycles_spec_initProvider_warm_setPriority := default (list) (index $indexLifecycles_spec_initProvider_warm_item "setPriority") }}
+        setPriority:
+        {{- range $indexLifecycles_spec_initProvider_warm_setPriority_item := $indexLifecycles_spec_initProvider_warm_setPriority }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_warm_setPriority_item "priority" }}
+            priority: {{ index $indexLifecycles_spec_initProvider_warm_setPriority_item "priority" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_warm_item "shrink" }}
+        {{- $indexLifecycles_spec_initProvider_warm_shrink := default (list) (index $indexLifecycles_spec_initProvider_warm_item "shrink") }}
+        shrink:
+        {{- range $indexLifecycles_spec_initProvider_warm_shrink_item := $indexLifecycles_spec_initProvider_warm_shrink }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_warm_shrink_item "allowWriteAfterShrink" }}
+            allowWriteAfterShrink: {{ index $indexLifecycles_spec_initProvider_warm_shrink_item "allowWriteAfterShrink" }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_warm_shrink_item "maxPrimaryShardSize" }}
+            maxPrimaryShardSize: {{ index $indexLifecycles_spec_initProvider_warm_shrink_item "maxPrimaryShardSize" | quote }}
+            {{- end }}
+            {{- if hasKey $indexLifecycles_spec_initProvider_warm_shrink_item "numberOfShards" }}
+            numberOfShards: {{ index $indexLifecycles_spec_initProvider_warm_shrink_item "numberOfShards" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $indexLifecycles_spec_initProvider_warm_item "unfollow" }}
+        {{- $indexLifecycles_spec_initProvider_warm_unfollow := default (list) (index $indexLifecycles_spec_initProvider_warm_item "unfollow") }}
+        unfollow:
+        {{- range $indexLifecycles_spec_initProvider_warm_unfollow_item := $indexLifecycles_spec_initProvider_warm_unfollow }}
+          -
+            {{- if hasKey $indexLifecycles_spec_initProvider_warm_unfollow_item "enabled" }}
+            enabled: {{ index $indexLifecycles_spec_initProvider_warm_unfollow_item "enabled" }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- if hasKey $spec "managementPolicies" }}
+  {{- $indexLifecycles_spec_managementPolicies := default (list) (index $spec "managementPolicies") }}
+  managementPolicies:
+    {{- toYaml $indexLifecycles_spec_managementPolicies | nindent 4 }}
+  {{- end }}
+  {{- if hasKey $spec "providerConfigRef" }}
+  {{- $indexLifecycles_spec_providerConfigRef := default (dict) (index $spec "providerConfigRef") }}
+  providerConfigRef:
+    {{- if hasKey $indexLifecycles_spec_providerConfigRef "kind" }}
+    kind: {{ index $indexLifecycles_spec_providerConfigRef "kind" | quote }}
+    {{- end }}
+    {{- if hasKey $indexLifecycles_spec_providerConfigRef "name" }}
+    name: {{ index $indexLifecycles_spec_providerConfigRef "name" | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if hasKey $spec "writeConnectionSecretToRef" }}
+  {{- $indexLifecycles_spec_writeConnectionSecretToRef := default (dict) (index $spec "writeConnectionSecretToRef") }}
+  writeConnectionSecretToRef:
+    {{- if hasKey $indexLifecycles_spec_writeConnectionSecretToRef "name" }}
+    name: {{ index $indexLifecycles_spec_writeConnectionSecretToRef "name" | quote }}
+    {{- end }}
+  {{- end }}
+{{- if lt (add1 $index) (len $.Values.indexLifecycles ) }}
+---
+{{- end }}
+{{- end }}

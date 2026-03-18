@@ -1,0 +1,6 @@
+apiVersion: v2
+name: provider-upjet-elasticstack
+description: Helm chart for namespaced managed resources from provider-upjet-elasticstack
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

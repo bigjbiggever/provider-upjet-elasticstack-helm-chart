@@ -1,0 +1,482 @@
+{{- range $index, $resource := .Values.elasticsearchRoles }}
+apiVersion: security.elasticstack.m.crossplane.io/v1alpha1
+kind: ElasticsearchRole
+metadata:
+  name: {{ required (printf "%s[%d].name is required" "elasticsearchRoles" $index) $resource.name }}
+  namespace: {{ default $.Release.Namespace $resource.namespace }}
+  {{- if or $resource.annotations $resource.externalName }}
+  annotations:
+    {{- if $resource.externalName }}
+    crossplane.io/external-name: {{ $resource.externalName | quote }}
+    {{- end }}
+    {{- with $resource.annotations }}
+{{ toYaml . | indent 4 }}
+    {{- end }}
+  {{- end }}
+  {{- if $resource.labels }}
+  labels:
+{{ toYaml $resource.labels | indent 4 }}
+  {{- end }}
+{{- $spec := default (dict) $resource.spec }}
+spec:
+  {{- if hasKey $spec "forProvider" }}
+  {{- $elasticsearchRoles_spec_forProvider := default (dict) (index $spec "forProvider") }}
+  forProvider:
+    {{- if hasKey $elasticsearchRoles_spec_forProvider "applications" }}
+    {{- $elasticsearchRoles_spec_forProvider_applications := default (list) (index $elasticsearchRoles_spec_forProvider "applications") }}
+    applications:
+    {{- range $elasticsearchRoles_spec_forProvider_applications_item := $elasticsearchRoles_spec_forProvider_applications }}
+      -
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_applications_item "application" }}
+        application: {{ index $elasticsearchRoles_spec_forProvider_applications_item "application" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_applications_item "privileges" }}
+        {{- $elasticsearchRoles_spec_forProvider_applications_privileges := default (list) (index $elasticsearchRoles_spec_forProvider_applications_item "privileges") }}
+        privileges:
+          {{- toYaml $elasticsearchRoles_spec_forProvider_applications_privileges | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_applications_item "resources" }}
+        {{- $elasticsearchRoles_spec_forProvider_applications_resources := default (list) (index $elasticsearchRoles_spec_forProvider_applications_item "resources") }}
+        resources:
+          {{- toYaml $elasticsearchRoles_spec_forProvider_applications_resources | nindent 10 }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_forProvider "cluster" }}
+    {{- $elasticsearchRoles_spec_forProvider_cluster := default (list) (index $elasticsearchRoles_spec_forProvider "cluster") }}
+    cluster:
+      {{- toYaml $elasticsearchRoles_spec_forProvider_cluster | nindent 6 }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_forProvider "description" }}
+    description: {{ index $elasticsearchRoles_spec_forProvider "description" | quote }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_forProvider "elasticsearchConnection" }}
+    {{- $elasticsearchRoles_spec_forProvider_elasticsearchConnection := default (list) (index $elasticsearchRoles_spec_forProvider "elasticsearchConnection") }}
+    elasticsearchConnection:
+    {{- range $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item := $elasticsearchRoles_spec_forProvider_elasticsearchConnection }}
+      -
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "apiKeySecretRef" }}
+        {{- $elasticsearchRoles_spec_forProvider_elasticsearchConnection_apiKeySecretRef := default (dict) (index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "apiKeySecretRef") }}
+        apiKeySecretRef:
+          {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_apiKeySecretRef "key" }}
+          key: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_apiKeySecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_apiKeySecretRef "name" }}
+          name: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_apiKeySecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "bearerTokenSecretRef" }}
+        {{- $elasticsearchRoles_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef := default (dict) (index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "bearerTokenSecretRef") }}
+        bearerTokenSecretRef:
+          {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "key" }}
+          key: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "name" }}
+          name: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "caData" }}
+        caData: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "caData" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "caFile" }}
+        caFile: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "caFile" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "certData" }}
+        certData: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "certData" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "certFile" }}
+        certFile: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "certFile" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "endpointsSecretRef" }}
+        {{- $elasticsearchRoles_spec_forProvider_elasticsearchConnection_endpointsSecretRef := default (list) (index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "endpointsSecretRef") }}
+        endpointsSecretRef:
+        {{- range $elasticsearchRoles_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item := $elasticsearchRoles_spec_forProvider_elasticsearchConnection_endpointsSecretRef }}
+          -
+            {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "key" }}
+            key: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "key" | quote }}
+            {{- end }}
+            {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "name" }}
+            name: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "name" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef" }}
+        {{- $elasticsearchRoles_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef := default (dict) (index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef") }}
+        esClientAuthenticationSecretRef:
+          {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" }}
+          key: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" }}
+          name: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "headersSecretRef" }}
+        {{- $elasticsearchRoles_spec_forProvider_elasticsearchConnection_headersSecretRef := default (dict) (index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "headersSecretRef") }}
+        headersSecretRef:
+          {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_headersSecretRef "name" }}
+          name: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_headersSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "insecure" }}
+        insecure: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "insecure" }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "keyDataSecretRef" }}
+        {{- $elasticsearchRoles_spec_forProvider_elasticsearchConnection_keyDataSecretRef := default (dict) (index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "keyDataSecretRef") }}
+        keyDataSecretRef:
+          {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_keyDataSecretRef "key" }}
+          key: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_keyDataSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_keyDataSecretRef "name" }}
+          name: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_keyDataSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "keyFile" }}
+        keyFile: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "keyFile" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "passwordSecretRef" }}
+        {{- $elasticsearchRoles_spec_forProvider_elasticsearchConnection_passwordSecretRef := default (dict) (index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "passwordSecretRef") }}
+        passwordSecretRef:
+          {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_passwordSecretRef "key" }}
+          key: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_passwordSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_passwordSecretRef "name" }}
+          name: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_passwordSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "username" }}
+        username: {{ index $elasticsearchRoles_spec_forProvider_elasticsearchConnection_item "username" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_forProvider "global" }}
+    global: {{ index $elasticsearchRoles_spec_forProvider "global" | quote }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_forProvider "indices" }}
+    {{- $elasticsearchRoles_spec_forProvider_indices := default (list) (index $elasticsearchRoles_spec_forProvider "indices") }}
+    indices:
+    {{- range $elasticsearchRoles_spec_forProvider_indices_item := $elasticsearchRoles_spec_forProvider_indices }}
+      -
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_indices_item "allowRestrictedIndices" }}
+        allowRestrictedIndices: {{ index $elasticsearchRoles_spec_forProvider_indices_item "allowRestrictedIndices" }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_indices_item "fieldSecurity" }}
+        {{- $elasticsearchRoles_spec_forProvider_indices_fieldSecurity := default (list) (index $elasticsearchRoles_spec_forProvider_indices_item "fieldSecurity") }}
+        fieldSecurity:
+        {{- range $elasticsearchRoles_spec_forProvider_indices_fieldSecurity_item := $elasticsearchRoles_spec_forProvider_indices_fieldSecurity }}
+          -
+            {{- if hasKey $elasticsearchRoles_spec_forProvider_indices_fieldSecurity_item "except" }}
+            {{- $elasticsearchRoles_spec_forProvider_indices_fieldSecurity_except := default (list) (index $elasticsearchRoles_spec_forProvider_indices_fieldSecurity_item "except") }}
+            except:
+              {{- toYaml $elasticsearchRoles_spec_forProvider_indices_fieldSecurity_except | nindent 14 }}
+            {{- end }}
+            {{- if hasKey $elasticsearchRoles_spec_forProvider_indices_fieldSecurity_item "grant" }}
+            {{- $elasticsearchRoles_spec_forProvider_indices_fieldSecurity_grant := default (list) (index $elasticsearchRoles_spec_forProvider_indices_fieldSecurity_item "grant") }}
+            grant:
+              {{- toYaml $elasticsearchRoles_spec_forProvider_indices_fieldSecurity_grant | nindent 14 }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_indices_item "names" }}
+        {{- $elasticsearchRoles_spec_forProvider_indices_names := default (list) (index $elasticsearchRoles_spec_forProvider_indices_item "names") }}
+        names:
+          {{- toYaml $elasticsearchRoles_spec_forProvider_indices_names | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_indices_item "privileges" }}
+        {{- $elasticsearchRoles_spec_forProvider_indices_privileges := default (list) (index $elasticsearchRoles_spec_forProvider_indices_item "privileges") }}
+        privileges:
+          {{- toYaml $elasticsearchRoles_spec_forProvider_indices_privileges | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_indices_item "query" }}
+        query: {{ index $elasticsearchRoles_spec_forProvider_indices_item "query" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_forProvider "metadata" }}
+    metadata: {{ index $elasticsearchRoles_spec_forProvider "metadata" | quote }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_forProvider "remoteIndices" }}
+    {{- $elasticsearchRoles_spec_forProvider_remoteIndices := default (list) (index $elasticsearchRoles_spec_forProvider "remoteIndices") }}
+    remoteIndices:
+    {{- range $elasticsearchRoles_spec_forProvider_remoteIndices_item := $elasticsearchRoles_spec_forProvider_remoteIndices }}
+      -
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_remoteIndices_item "clusters" }}
+        {{- $elasticsearchRoles_spec_forProvider_remoteIndices_clusters := default (list) (index $elasticsearchRoles_spec_forProvider_remoteIndices_item "clusters") }}
+        clusters:
+          {{- toYaml $elasticsearchRoles_spec_forProvider_remoteIndices_clusters | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_remoteIndices_item "fieldSecurity" }}
+        {{- $elasticsearchRoles_spec_forProvider_remoteIndices_fieldSecurity := default (list) (index $elasticsearchRoles_spec_forProvider_remoteIndices_item "fieldSecurity") }}
+        fieldSecurity:
+        {{- range $elasticsearchRoles_spec_forProvider_remoteIndices_fieldSecurity_item := $elasticsearchRoles_spec_forProvider_remoteIndices_fieldSecurity }}
+          -
+            {{- if hasKey $elasticsearchRoles_spec_forProvider_remoteIndices_fieldSecurity_item "except" }}
+            {{- $elasticsearchRoles_spec_forProvider_remoteIndices_fieldSecurity_except := default (list) (index $elasticsearchRoles_spec_forProvider_remoteIndices_fieldSecurity_item "except") }}
+            except:
+              {{- toYaml $elasticsearchRoles_spec_forProvider_remoteIndices_fieldSecurity_except | nindent 14 }}
+            {{- end }}
+            {{- if hasKey $elasticsearchRoles_spec_forProvider_remoteIndices_fieldSecurity_item "grant" }}
+            {{- $elasticsearchRoles_spec_forProvider_remoteIndices_fieldSecurity_grant := default (list) (index $elasticsearchRoles_spec_forProvider_remoteIndices_fieldSecurity_item "grant") }}
+            grant:
+              {{- toYaml $elasticsearchRoles_spec_forProvider_remoteIndices_fieldSecurity_grant | nindent 14 }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_remoteIndices_item "names" }}
+        {{- $elasticsearchRoles_spec_forProvider_remoteIndices_names := default (list) (index $elasticsearchRoles_spec_forProvider_remoteIndices_item "names") }}
+        names:
+          {{- toYaml $elasticsearchRoles_spec_forProvider_remoteIndices_names | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_remoteIndices_item "privileges" }}
+        {{- $elasticsearchRoles_spec_forProvider_remoteIndices_privileges := default (list) (index $elasticsearchRoles_spec_forProvider_remoteIndices_item "privileges") }}
+        privileges:
+          {{- toYaml $elasticsearchRoles_spec_forProvider_remoteIndices_privileges | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_forProvider_remoteIndices_item "query" }}
+        query: {{ index $elasticsearchRoles_spec_forProvider_remoteIndices_item "query" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_forProvider "runAs" }}
+    {{- $elasticsearchRoles_spec_forProvider_runAs := default (list) (index $elasticsearchRoles_spec_forProvider "runAs") }}
+    runAs:
+      {{- toYaml $elasticsearchRoles_spec_forProvider_runAs | nindent 6 }}
+    {{- end }}
+  {{- end }}
+  {{- if hasKey $spec "initProvider" }}
+  {{- $elasticsearchRoles_spec_initProvider := default (dict) (index $spec "initProvider") }}
+  initProvider:
+    {{- if hasKey $elasticsearchRoles_spec_initProvider "applications" }}
+    {{- $elasticsearchRoles_spec_initProvider_applications := default (list) (index $elasticsearchRoles_spec_initProvider "applications") }}
+    applications:
+    {{- range $elasticsearchRoles_spec_initProvider_applications_item := $elasticsearchRoles_spec_initProvider_applications }}
+      -
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_applications_item "application" }}
+        application: {{ index $elasticsearchRoles_spec_initProvider_applications_item "application" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_applications_item "privileges" }}
+        {{- $elasticsearchRoles_spec_initProvider_applications_privileges := default (list) (index $elasticsearchRoles_spec_initProvider_applications_item "privileges") }}
+        privileges:
+          {{- toYaml $elasticsearchRoles_spec_initProvider_applications_privileges | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_applications_item "resources" }}
+        {{- $elasticsearchRoles_spec_initProvider_applications_resources := default (list) (index $elasticsearchRoles_spec_initProvider_applications_item "resources") }}
+        resources:
+          {{- toYaml $elasticsearchRoles_spec_initProvider_applications_resources | nindent 10 }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_initProvider "cluster" }}
+    {{- $elasticsearchRoles_spec_initProvider_cluster := default (list) (index $elasticsearchRoles_spec_initProvider "cluster") }}
+    cluster:
+      {{- toYaml $elasticsearchRoles_spec_initProvider_cluster | nindent 6 }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_initProvider "description" }}
+    description: {{ index $elasticsearchRoles_spec_initProvider "description" | quote }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_initProvider "elasticsearchConnection" }}
+    {{- $elasticsearchRoles_spec_initProvider_elasticsearchConnection := default (list) (index $elasticsearchRoles_spec_initProvider "elasticsearchConnection") }}
+    elasticsearchConnection:
+    {{- range $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item := $elasticsearchRoles_spec_initProvider_elasticsearchConnection }}
+      -
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "apiKeySecretRef" }}
+        {{- $elasticsearchRoles_spec_initProvider_elasticsearchConnection_apiKeySecretRef := default (dict) (index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "apiKeySecretRef") }}
+        apiKeySecretRef:
+          {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_apiKeySecretRef "key" }}
+          key: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_apiKeySecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_apiKeySecretRef "name" }}
+          name: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_apiKeySecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "bearerTokenSecretRef" }}
+        {{- $elasticsearchRoles_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef := default (dict) (index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "bearerTokenSecretRef") }}
+        bearerTokenSecretRef:
+          {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "key" }}
+          key: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "name" }}
+          name: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "caData" }}
+        caData: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "caData" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "caFile" }}
+        caFile: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "caFile" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "certData" }}
+        certData: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "certData" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "certFile" }}
+        certFile: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "certFile" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "endpointsSecretRef" }}
+        {{- $elasticsearchRoles_spec_initProvider_elasticsearchConnection_endpointsSecretRef := default (list) (index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "endpointsSecretRef") }}
+        endpointsSecretRef:
+          {{- toYaml $elasticsearchRoles_spec_initProvider_elasticsearchConnection_endpointsSecretRef | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef" }}
+        {{- $elasticsearchRoles_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef := default (dict) (index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef") }}
+        esClientAuthenticationSecretRef:
+          {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" }}
+          key: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" }}
+          name: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "headersSecretRef" }}
+        headersSecretRef:
+          {{- toYaml (default (dict) (index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "headersSecretRef")) | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "insecure" }}
+        insecure: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "insecure" }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "keyDataSecretRef" }}
+        {{- $elasticsearchRoles_spec_initProvider_elasticsearchConnection_keyDataSecretRef := default (dict) (index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "keyDataSecretRef") }}
+        keyDataSecretRef:
+          {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_keyDataSecretRef "key" }}
+          key: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_keyDataSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_keyDataSecretRef "name" }}
+          name: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_keyDataSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "keyFile" }}
+        keyFile: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "keyFile" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "passwordSecretRef" }}
+        {{- $elasticsearchRoles_spec_initProvider_elasticsearchConnection_passwordSecretRef := default (dict) (index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "passwordSecretRef") }}
+        passwordSecretRef:
+          {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_passwordSecretRef "key" }}
+          key: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_passwordSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_passwordSecretRef "name" }}
+          name: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_passwordSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "username" }}
+        username: {{ index $elasticsearchRoles_spec_initProvider_elasticsearchConnection_item "username" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_initProvider "global" }}
+    global: {{ index $elasticsearchRoles_spec_initProvider "global" | quote }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_initProvider "indices" }}
+    {{- $elasticsearchRoles_spec_initProvider_indices := default (list) (index $elasticsearchRoles_spec_initProvider "indices") }}
+    indices:
+    {{- range $elasticsearchRoles_spec_initProvider_indices_item := $elasticsearchRoles_spec_initProvider_indices }}
+      -
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_indices_item "allowRestrictedIndices" }}
+        allowRestrictedIndices: {{ index $elasticsearchRoles_spec_initProvider_indices_item "allowRestrictedIndices" }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_indices_item "fieldSecurity" }}
+        {{- $elasticsearchRoles_spec_initProvider_indices_fieldSecurity := default (list) (index $elasticsearchRoles_spec_initProvider_indices_item "fieldSecurity") }}
+        fieldSecurity:
+        {{- range $elasticsearchRoles_spec_initProvider_indices_fieldSecurity_item := $elasticsearchRoles_spec_initProvider_indices_fieldSecurity }}
+          -
+            {{- if hasKey $elasticsearchRoles_spec_initProvider_indices_fieldSecurity_item "except" }}
+            {{- $elasticsearchRoles_spec_initProvider_indices_fieldSecurity_except := default (list) (index $elasticsearchRoles_spec_initProvider_indices_fieldSecurity_item "except") }}
+            except:
+              {{- toYaml $elasticsearchRoles_spec_initProvider_indices_fieldSecurity_except | nindent 14 }}
+            {{- end }}
+            {{- if hasKey $elasticsearchRoles_spec_initProvider_indices_fieldSecurity_item "grant" }}
+            {{- $elasticsearchRoles_spec_initProvider_indices_fieldSecurity_grant := default (list) (index $elasticsearchRoles_spec_initProvider_indices_fieldSecurity_item "grant") }}
+            grant:
+              {{- toYaml $elasticsearchRoles_spec_initProvider_indices_fieldSecurity_grant | nindent 14 }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_indices_item "names" }}
+        {{- $elasticsearchRoles_spec_initProvider_indices_names := default (list) (index $elasticsearchRoles_spec_initProvider_indices_item "names") }}
+        names:
+          {{- toYaml $elasticsearchRoles_spec_initProvider_indices_names | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_indices_item "privileges" }}
+        {{- $elasticsearchRoles_spec_initProvider_indices_privileges := default (list) (index $elasticsearchRoles_spec_initProvider_indices_item "privileges") }}
+        privileges:
+          {{- toYaml $elasticsearchRoles_spec_initProvider_indices_privileges | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_indices_item "query" }}
+        query: {{ index $elasticsearchRoles_spec_initProvider_indices_item "query" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_initProvider "metadata" }}
+    metadata: {{ index $elasticsearchRoles_spec_initProvider "metadata" | quote }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_initProvider "remoteIndices" }}
+    {{- $elasticsearchRoles_spec_initProvider_remoteIndices := default (list) (index $elasticsearchRoles_spec_initProvider "remoteIndices") }}
+    remoteIndices:
+    {{- range $elasticsearchRoles_spec_initProvider_remoteIndices_item := $elasticsearchRoles_spec_initProvider_remoteIndices }}
+      -
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_remoteIndices_item "clusters" }}
+        {{- $elasticsearchRoles_spec_initProvider_remoteIndices_clusters := default (list) (index $elasticsearchRoles_spec_initProvider_remoteIndices_item "clusters") }}
+        clusters:
+          {{- toYaml $elasticsearchRoles_spec_initProvider_remoteIndices_clusters | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_remoteIndices_item "fieldSecurity" }}
+        {{- $elasticsearchRoles_spec_initProvider_remoteIndices_fieldSecurity := default (list) (index $elasticsearchRoles_spec_initProvider_remoteIndices_item "fieldSecurity") }}
+        fieldSecurity:
+        {{- range $elasticsearchRoles_spec_initProvider_remoteIndices_fieldSecurity_item := $elasticsearchRoles_spec_initProvider_remoteIndices_fieldSecurity }}
+          -
+            {{- if hasKey $elasticsearchRoles_spec_initProvider_remoteIndices_fieldSecurity_item "except" }}
+            {{- $elasticsearchRoles_spec_initProvider_remoteIndices_fieldSecurity_except := default (list) (index $elasticsearchRoles_spec_initProvider_remoteIndices_fieldSecurity_item "except") }}
+            except:
+              {{- toYaml $elasticsearchRoles_spec_initProvider_remoteIndices_fieldSecurity_except | nindent 14 }}
+            {{- end }}
+            {{- if hasKey $elasticsearchRoles_spec_initProvider_remoteIndices_fieldSecurity_item "grant" }}
+            {{- $elasticsearchRoles_spec_initProvider_remoteIndices_fieldSecurity_grant := default (list) (index $elasticsearchRoles_spec_initProvider_remoteIndices_fieldSecurity_item "grant") }}
+            grant:
+              {{- toYaml $elasticsearchRoles_spec_initProvider_remoteIndices_fieldSecurity_grant | nindent 14 }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_remoteIndices_item "names" }}
+        {{- $elasticsearchRoles_spec_initProvider_remoteIndices_names := default (list) (index $elasticsearchRoles_spec_initProvider_remoteIndices_item "names") }}
+        names:
+          {{- toYaml $elasticsearchRoles_spec_initProvider_remoteIndices_names | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_remoteIndices_item "privileges" }}
+        {{- $elasticsearchRoles_spec_initProvider_remoteIndices_privileges := default (list) (index $elasticsearchRoles_spec_initProvider_remoteIndices_item "privileges") }}
+        privileges:
+          {{- toYaml $elasticsearchRoles_spec_initProvider_remoteIndices_privileges | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $elasticsearchRoles_spec_initProvider_remoteIndices_item "query" }}
+        query: {{ index $elasticsearchRoles_spec_initProvider_remoteIndices_item "query" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_initProvider "runAs" }}
+    {{- $elasticsearchRoles_spec_initProvider_runAs := default (list) (index $elasticsearchRoles_spec_initProvider "runAs") }}
+    runAs:
+      {{- toYaml $elasticsearchRoles_spec_initProvider_runAs | nindent 6 }}
+    {{- end }}
+  {{- end }}
+  {{- if hasKey $spec "managementPolicies" }}
+  {{- $elasticsearchRoles_spec_managementPolicies := default (list) (index $spec "managementPolicies") }}
+  managementPolicies:
+    {{- toYaml $elasticsearchRoles_spec_managementPolicies | nindent 4 }}
+  {{- end }}
+  {{- if hasKey $spec "providerConfigRef" }}
+  {{- $elasticsearchRoles_spec_providerConfigRef := default (dict) (index $spec "providerConfigRef") }}
+  providerConfigRef:
+    {{- if hasKey $elasticsearchRoles_spec_providerConfigRef "kind" }}
+    kind: {{ index $elasticsearchRoles_spec_providerConfigRef "kind" | quote }}
+    {{- end }}
+    {{- if hasKey $elasticsearchRoles_spec_providerConfigRef "name" }}
+    name: {{ index $elasticsearchRoles_spec_providerConfigRef "name" | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if hasKey $spec "writeConnectionSecretToRef" }}
+  {{- $elasticsearchRoles_spec_writeConnectionSecretToRef := default (dict) (index $spec "writeConnectionSecretToRef") }}
+  writeConnectionSecretToRef:
+    {{- if hasKey $elasticsearchRoles_spec_writeConnectionSecretToRef "name" }}
+    name: {{ index $elasticsearchRoles_spec_writeConnectionSecretToRef "name" | quote }}
+    {{- end }}
+  {{- end }}
+{{- if lt (add1 $index) (len $.Values.elasticsearchRoles ) }}
+---
+{{- end }}
+{{- end }}

@@ -1,0 +1,660 @@
+{{- range $index, $resource := .Values.snapshotRepositories }}
+apiVersion: snapshot.elasticstack.m.crossplane.io/v1alpha1
+kind: SnapshotRepository
+metadata:
+  name: {{ required (printf "%s[%d].name is required" "snapshotRepositories" $index) $resource.name }}
+  namespace: {{ default $.Release.Namespace $resource.namespace }}
+  {{- if or $resource.annotations $resource.externalName }}
+  annotations:
+    {{- if $resource.externalName }}
+    crossplane.io/external-name: {{ $resource.externalName | quote }}
+    {{- end }}
+    {{- with $resource.annotations }}
+{{ toYaml . | indent 4 }}
+    {{- end }}
+  {{- end }}
+  {{- if $resource.labels }}
+  labels:
+{{ toYaml $resource.labels | indent 4 }}
+  {{- end }}
+{{- $spec := default (dict) $resource.spec }}
+spec:
+  {{- if hasKey $spec "forProvider" }}
+  {{- $snapshotRepositories_spec_forProvider := default (dict) (index $spec "forProvider") }}
+  forProvider:
+    {{- if hasKey $snapshotRepositories_spec_forProvider "azure" }}
+    {{- $snapshotRepositories_spec_forProvider_azure := default (list) (index $snapshotRepositories_spec_forProvider "azure") }}
+    azure:
+    {{- range $snapshotRepositories_spec_forProvider_azure_item := $snapshotRepositories_spec_forProvider_azure }}
+      -
+        {{- if hasKey $snapshotRepositories_spec_forProvider_azure_item "basePath" }}
+        basePath: {{ index $snapshotRepositories_spec_forProvider_azure_item "basePath" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_azure_item "chunkSize" }}
+        chunkSize: {{ index $snapshotRepositories_spec_forProvider_azure_item "chunkSize" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_azure_item "client" }}
+        client: {{ index $snapshotRepositories_spec_forProvider_azure_item "client" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_azure_item "compress" }}
+        compress: {{ index $snapshotRepositories_spec_forProvider_azure_item "compress" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_azure_item "container" }}
+        container: {{ index $snapshotRepositories_spec_forProvider_azure_item "container" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_azure_item "locationMode" }}
+        locationMode: {{ index $snapshotRepositories_spec_forProvider_azure_item "locationMode" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_azure_item "maxRestoreBytesPerSec" }}
+        maxRestoreBytesPerSec: {{ index $snapshotRepositories_spec_forProvider_azure_item "maxRestoreBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_azure_item "maxSnapshotBytesPerSec" }}
+        maxSnapshotBytesPerSec: {{ index $snapshotRepositories_spec_forProvider_azure_item "maxSnapshotBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_azure_item "readonly" }}
+        readonly: {{ index $snapshotRepositories_spec_forProvider_azure_item "readonly" }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $snapshotRepositories_spec_forProvider "elasticsearchConnection" }}
+    {{- $snapshotRepositories_spec_forProvider_elasticsearchConnection := default (list) (index $snapshotRepositories_spec_forProvider "elasticsearchConnection") }}
+    elasticsearchConnection:
+    {{- range $snapshotRepositories_spec_forProvider_elasticsearchConnection_item := $snapshotRepositories_spec_forProvider_elasticsearchConnection }}
+      -
+        {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "apiKeySecretRef" }}
+        {{- $snapshotRepositories_spec_forProvider_elasticsearchConnection_apiKeySecretRef := default (dict) (index $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "apiKeySecretRef") }}
+        apiKeySecretRef:
+          {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_apiKeySecretRef "key" }}
+          key: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_apiKeySecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_apiKeySecretRef "name" }}
+          name: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_apiKeySecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "bearerTokenSecretRef" }}
+        {{- $snapshotRepositories_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef := default (dict) (index $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "bearerTokenSecretRef") }}
+        bearerTokenSecretRef:
+          {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "key" }}
+          key: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "name" }}
+          name: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "caData" }}
+        caData: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "caData" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "caFile" }}
+        caFile: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "caFile" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "certData" }}
+        certData: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "certData" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "certFile" }}
+        certFile: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "certFile" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "endpointsSecretRef" }}
+        {{- $snapshotRepositories_spec_forProvider_elasticsearchConnection_endpointsSecretRef := default (list) (index $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "endpointsSecretRef") }}
+        endpointsSecretRef:
+        {{- range $snapshotRepositories_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item := $snapshotRepositories_spec_forProvider_elasticsearchConnection_endpointsSecretRef }}
+          -
+            {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "key" }}
+            key: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "key" | quote }}
+            {{- end }}
+            {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "name" }}
+            name: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "name" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef" }}
+        {{- $snapshotRepositories_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef := default (dict) (index $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef") }}
+        esClientAuthenticationSecretRef:
+          {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" }}
+          key: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" }}
+          name: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "headersSecretRef" }}
+        {{- $snapshotRepositories_spec_forProvider_elasticsearchConnection_headersSecretRef := default (dict) (index $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "headersSecretRef") }}
+        headersSecretRef:
+          {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_headersSecretRef "name" }}
+          name: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_headersSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "insecure" }}
+        insecure: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "insecure" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "keyDataSecretRef" }}
+        {{- $snapshotRepositories_spec_forProvider_elasticsearchConnection_keyDataSecretRef := default (dict) (index $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "keyDataSecretRef") }}
+        keyDataSecretRef:
+          {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_keyDataSecretRef "key" }}
+          key: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_keyDataSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_keyDataSecretRef "name" }}
+          name: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_keyDataSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "keyFile" }}
+        keyFile: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "keyFile" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "passwordSecretRef" }}
+        {{- $snapshotRepositories_spec_forProvider_elasticsearchConnection_passwordSecretRef := default (dict) (index $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "passwordSecretRef") }}
+        passwordSecretRef:
+          {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_passwordSecretRef "key" }}
+          key: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_passwordSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_passwordSecretRef "name" }}
+          name: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_passwordSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "username" }}
+        username: {{ index $snapshotRepositories_spec_forProvider_elasticsearchConnection_item "username" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $snapshotRepositories_spec_forProvider "fs" }}
+    {{- $snapshotRepositories_spec_forProvider_fs := default (list) (index $snapshotRepositories_spec_forProvider "fs") }}
+    fs:
+    {{- range $snapshotRepositories_spec_forProvider_fs_item := $snapshotRepositories_spec_forProvider_fs }}
+      -
+        {{- if hasKey $snapshotRepositories_spec_forProvider_fs_item "chunkSize" }}
+        chunkSize: {{ index $snapshotRepositories_spec_forProvider_fs_item "chunkSize" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_fs_item "compress" }}
+        compress: {{ index $snapshotRepositories_spec_forProvider_fs_item "compress" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_fs_item "location" }}
+        location: {{ index $snapshotRepositories_spec_forProvider_fs_item "location" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_fs_item "maxNumberOfSnapshots" }}
+        maxNumberOfSnapshots: {{ index $snapshotRepositories_spec_forProvider_fs_item "maxNumberOfSnapshots" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_fs_item "maxRestoreBytesPerSec" }}
+        maxRestoreBytesPerSec: {{ index $snapshotRepositories_spec_forProvider_fs_item "maxRestoreBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_fs_item "maxSnapshotBytesPerSec" }}
+        maxSnapshotBytesPerSec: {{ index $snapshotRepositories_spec_forProvider_fs_item "maxSnapshotBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_fs_item "readonly" }}
+        readonly: {{ index $snapshotRepositories_spec_forProvider_fs_item "readonly" }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $snapshotRepositories_spec_forProvider "gcs" }}
+    {{- $snapshotRepositories_spec_forProvider_gcs := default (list) (index $snapshotRepositories_spec_forProvider "gcs") }}
+    gcs:
+    {{- range $snapshotRepositories_spec_forProvider_gcs_item := $snapshotRepositories_spec_forProvider_gcs }}
+      -
+        {{- if hasKey $snapshotRepositories_spec_forProvider_gcs_item "basePath" }}
+        basePath: {{ index $snapshotRepositories_spec_forProvider_gcs_item "basePath" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_gcs_item "bucket" }}
+        bucket: {{ index $snapshotRepositories_spec_forProvider_gcs_item "bucket" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_gcs_item "chunkSize" }}
+        chunkSize: {{ index $snapshotRepositories_spec_forProvider_gcs_item "chunkSize" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_gcs_item "client" }}
+        client: {{ index $snapshotRepositories_spec_forProvider_gcs_item "client" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_gcs_item "compress" }}
+        compress: {{ index $snapshotRepositories_spec_forProvider_gcs_item "compress" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_gcs_item "maxRestoreBytesPerSec" }}
+        maxRestoreBytesPerSec: {{ index $snapshotRepositories_spec_forProvider_gcs_item "maxRestoreBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_gcs_item "maxSnapshotBytesPerSec" }}
+        maxSnapshotBytesPerSec: {{ index $snapshotRepositories_spec_forProvider_gcs_item "maxSnapshotBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_gcs_item "readonly" }}
+        readonly: {{ index $snapshotRepositories_spec_forProvider_gcs_item "readonly" }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $snapshotRepositories_spec_forProvider "hdfs" }}
+    {{- $snapshotRepositories_spec_forProvider_hdfs := default (list) (index $snapshotRepositories_spec_forProvider "hdfs") }}
+    hdfs:
+    {{- range $snapshotRepositories_spec_forProvider_hdfs_item := $snapshotRepositories_spec_forProvider_hdfs }}
+      -
+        {{- if hasKey $snapshotRepositories_spec_forProvider_hdfs_item "chunkSize" }}
+        chunkSize: {{ index $snapshotRepositories_spec_forProvider_hdfs_item "chunkSize" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_hdfs_item "compress" }}
+        compress: {{ index $snapshotRepositories_spec_forProvider_hdfs_item "compress" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_hdfs_item "loadDefaults" }}
+        loadDefaults: {{ index $snapshotRepositories_spec_forProvider_hdfs_item "loadDefaults" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_hdfs_item "maxRestoreBytesPerSec" }}
+        maxRestoreBytesPerSec: {{ index $snapshotRepositories_spec_forProvider_hdfs_item "maxRestoreBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_hdfs_item "maxSnapshotBytesPerSec" }}
+        maxSnapshotBytesPerSec: {{ index $snapshotRepositories_spec_forProvider_hdfs_item "maxSnapshotBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_hdfs_item "path" }}
+        path: {{ index $snapshotRepositories_spec_forProvider_hdfs_item "path" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_hdfs_item "readonly" }}
+        readonly: {{ index $snapshotRepositories_spec_forProvider_hdfs_item "readonly" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_hdfs_item "uri" }}
+        uri: {{ index $snapshotRepositories_spec_forProvider_hdfs_item "uri" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $snapshotRepositories_spec_forProvider "s3" }}
+    {{- $snapshotRepositories_spec_forProvider_s3 := default (list) (index $snapshotRepositories_spec_forProvider "s3") }}
+    s3:
+    {{- range $snapshotRepositories_spec_forProvider_s3_item := $snapshotRepositories_spec_forProvider_s3 }}
+      -
+        {{- if hasKey $snapshotRepositories_spec_forProvider_s3_item "basePath" }}
+        basePath: {{ index $snapshotRepositories_spec_forProvider_s3_item "basePath" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_s3_item "bucket" }}
+        bucket: {{ index $snapshotRepositories_spec_forProvider_s3_item "bucket" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_s3_item "bufferSize" }}
+        bufferSize: {{ index $snapshotRepositories_spec_forProvider_s3_item "bufferSize" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_s3_item "cannedAcl" }}
+        cannedAcl: {{ index $snapshotRepositories_spec_forProvider_s3_item "cannedAcl" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_s3_item "chunkSize" }}
+        chunkSize: {{ index $snapshotRepositories_spec_forProvider_s3_item "chunkSize" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_s3_item "client" }}
+        client: {{ index $snapshotRepositories_spec_forProvider_s3_item "client" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_s3_item "compress" }}
+        compress: {{ index $snapshotRepositories_spec_forProvider_s3_item "compress" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_s3_item "endpoint" }}
+        endpoint: {{ index $snapshotRepositories_spec_forProvider_s3_item "endpoint" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_s3_item "maxRestoreBytesPerSec" }}
+        maxRestoreBytesPerSec: {{ index $snapshotRepositories_spec_forProvider_s3_item "maxRestoreBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_s3_item "maxSnapshotBytesPerSec" }}
+        maxSnapshotBytesPerSec: {{ index $snapshotRepositories_spec_forProvider_s3_item "maxSnapshotBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_s3_item "pathStyleAccess" }}
+        pathStyleAccess: {{ index $snapshotRepositories_spec_forProvider_s3_item "pathStyleAccess" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_s3_item "readonly" }}
+        readonly: {{ index $snapshotRepositories_spec_forProvider_s3_item "readonly" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_s3_item "serverSideEncryption" }}
+        serverSideEncryption: {{ index $snapshotRepositories_spec_forProvider_s3_item "serverSideEncryption" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_s3_item "storageClass" }}
+        storageClass: {{ index $snapshotRepositories_spec_forProvider_s3_item "storageClass" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $snapshotRepositories_spec_forProvider "url" }}
+    {{- $snapshotRepositories_spec_forProvider_url := default (list) (index $snapshotRepositories_spec_forProvider "url") }}
+    url:
+    {{- range $snapshotRepositories_spec_forProvider_url_item := $snapshotRepositories_spec_forProvider_url }}
+      -
+        {{- if hasKey $snapshotRepositories_spec_forProvider_url_item "chunkSize" }}
+        chunkSize: {{ index $snapshotRepositories_spec_forProvider_url_item "chunkSize" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_url_item "compress" }}
+        compress: {{ index $snapshotRepositories_spec_forProvider_url_item "compress" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_url_item "httpMaxRetries" }}
+        httpMaxRetries: {{ index $snapshotRepositories_spec_forProvider_url_item "httpMaxRetries" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_url_item "httpSocketTimeout" }}
+        httpSocketTimeout: {{ index $snapshotRepositories_spec_forProvider_url_item "httpSocketTimeout" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_url_item "maxNumberOfSnapshots" }}
+        maxNumberOfSnapshots: {{ index $snapshotRepositories_spec_forProvider_url_item "maxNumberOfSnapshots" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_url_item "maxRestoreBytesPerSec" }}
+        maxRestoreBytesPerSec: {{ index $snapshotRepositories_spec_forProvider_url_item "maxRestoreBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_url_item "maxSnapshotBytesPerSec" }}
+        maxSnapshotBytesPerSec: {{ index $snapshotRepositories_spec_forProvider_url_item "maxSnapshotBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_url_item "readonly" }}
+        readonly: {{ index $snapshotRepositories_spec_forProvider_url_item "readonly" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_forProvider_url_item "url" }}
+        url: {{ index $snapshotRepositories_spec_forProvider_url_item "url" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $snapshotRepositories_spec_forProvider "verify" }}
+    verify: {{ index $snapshotRepositories_spec_forProvider "verify" }}
+    {{- end }}
+  {{- end }}
+  {{- if hasKey $spec "initProvider" }}
+  {{- $snapshotRepositories_spec_initProvider := default (dict) (index $spec "initProvider") }}
+  initProvider:
+    {{- if hasKey $snapshotRepositories_spec_initProvider "azure" }}
+    {{- $snapshotRepositories_spec_initProvider_azure := default (list) (index $snapshotRepositories_spec_initProvider "azure") }}
+    azure:
+    {{- range $snapshotRepositories_spec_initProvider_azure_item := $snapshotRepositories_spec_initProvider_azure }}
+      -
+        {{- if hasKey $snapshotRepositories_spec_initProvider_azure_item "basePath" }}
+        basePath: {{ index $snapshotRepositories_spec_initProvider_azure_item "basePath" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_azure_item "chunkSize" }}
+        chunkSize: {{ index $snapshotRepositories_spec_initProvider_azure_item "chunkSize" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_azure_item "client" }}
+        client: {{ index $snapshotRepositories_spec_initProvider_azure_item "client" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_azure_item "compress" }}
+        compress: {{ index $snapshotRepositories_spec_initProvider_azure_item "compress" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_azure_item "container" }}
+        container: {{ index $snapshotRepositories_spec_initProvider_azure_item "container" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_azure_item "locationMode" }}
+        locationMode: {{ index $snapshotRepositories_spec_initProvider_azure_item "locationMode" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_azure_item "maxRestoreBytesPerSec" }}
+        maxRestoreBytesPerSec: {{ index $snapshotRepositories_spec_initProvider_azure_item "maxRestoreBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_azure_item "maxSnapshotBytesPerSec" }}
+        maxSnapshotBytesPerSec: {{ index $snapshotRepositories_spec_initProvider_azure_item "maxSnapshotBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_azure_item "readonly" }}
+        readonly: {{ index $snapshotRepositories_spec_initProvider_azure_item "readonly" }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $snapshotRepositories_spec_initProvider "elasticsearchConnection" }}
+    {{- $snapshotRepositories_spec_initProvider_elasticsearchConnection := default (list) (index $snapshotRepositories_spec_initProvider "elasticsearchConnection") }}
+    elasticsearchConnection:
+    {{- range $snapshotRepositories_spec_initProvider_elasticsearchConnection_item := $snapshotRepositories_spec_initProvider_elasticsearchConnection }}
+      -
+        {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "apiKeySecretRef" }}
+        {{- $snapshotRepositories_spec_initProvider_elasticsearchConnection_apiKeySecretRef := default (dict) (index $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "apiKeySecretRef") }}
+        apiKeySecretRef:
+          {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_apiKeySecretRef "key" }}
+          key: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_apiKeySecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_apiKeySecretRef "name" }}
+          name: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_apiKeySecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "bearerTokenSecretRef" }}
+        {{- $snapshotRepositories_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef := default (dict) (index $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "bearerTokenSecretRef") }}
+        bearerTokenSecretRef:
+          {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "key" }}
+          key: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "name" }}
+          name: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "caData" }}
+        caData: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "caData" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "caFile" }}
+        caFile: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "caFile" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "certData" }}
+        certData: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "certData" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "certFile" }}
+        certFile: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "certFile" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "endpointsSecretRef" }}
+        {{- $snapshotRepositories_spec_initProvider_elasticsearchConnection_endpointsSecretRef := default (list) (index $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "endpointsSecretRef") }}
+        endpointsSecretRef:
+          {{- toYaml $snapshotRepositories_spec_initProvider_elasticsearchConnection_endpointsSecretRef | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef" }}
+        {{- $snapshotRepositories_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef := default (dict) (index $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef") }}
+        esClientAuthenticationSecretRef:
+          {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" }}
+          key: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" }}
+          name: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "headersSecretRef" }}
+        headersSecretRef:
+          {{- toYaml (default (dict) (index $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "headersSecretRef")) | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "insecure" }}
+        insecure: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "insecure" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "keyDataSecretRef" }}
+        {{- $snapshotRepositories_spec_initProvider_elasticsearchConnection_keyDataSecretRef := default (dict) (index $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "keyDataSecretRef") }}
+        keyDataSecretRef:
+          {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_keyDataSecretRef "key" }}
+          key: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_keyDataSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_keyDataSecretRef "name" }}
+          name: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_keyDataSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "keyFile" }}
+        keyFile: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "keyFile" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "passwordSecretRef" }}
+        {{- $snapshotRepositories_spec_initProvider_elasticsearchConnection_passwordSecretRef := default (dict) (index $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "passwordSecretRef") }}
+        passwordSecretRef:
+          {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_passwordSecretRef "key" }}
+          key: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_passwordSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_passwordSecretRef "name" }}
+          name: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_passwordSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "username" }}
+        username: {{ index $snapshotRepositories_spec_initProvider_elasticsearchConnection_item "username" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $snapshotRepositories_spec_initProvider "fs" }}
+    {{- $snapshotRepositories_spec_initProvider_fs := default (list) (index $snapshotRepositories_spec_initProvider "fs") }}
+    fs:
+    {{- range $snapshotRepositories_spec_initProvider_fs_item := $snapshotRepositories_spec_initProvider_fs }}
+      -
+        {{- if hasKey $snapshotRepositories_spec_initProvider_fs_item "chunkSize" }}
+        chunkSize: {{ index $snapshotRepositories_spec_initProvider_fs_item "chunkSize" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_fs_item "compress" }}
+        compress: {{ index $snapshotRepositories_spec_initProvider_fs_item "compress" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_fs_item "location" }}
+        location: {{ index $snapshotRepositories_spec_initProvider_fs_item "location" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_fs_item "maxNumberOfSnapshots" }}
+        maxNumberOfSnapshots: {{ index $snapshotRepositories_spec_initProvider_fs_item "maxNumberOfSnapshots" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_fs_item "maxRestoreBytesPerSec" }}
+        maxRestoreBytesPerSec: {{ index $snapshotRepositories_spec_initProvider_fs_item "maxRestoreBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_fs_item "maxSnapshotBytesPerSec" }}
+        maxSnapshotBytesPerSec: {{ index $snapshotRepositories_spec_initProvider_fs_item "maxSnapshotBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_fs_item "readonly" }}
+        readonly: {{ index $snapshotRepositories_spec_initProvider_fs_item "readonly" }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $snapshotRepositories_spec_initProvider "gcs" }}
+    {{- $snapshotRepositories_spec_initProvider_gcs := default (list) (index $snapshotRepositories_spec_initProvider "gcs") }}
+    gcs:
+    {{- range $snapshotRepositories_spec_initProvider_gcs_item := $snapshotRepositories_spec_initProvider_gcs }}
+      -
+        {{- if hasKey $snapshotRepositories_spec_initProvider_gcs_item "basePath" }}
+        basePath: {{ index $snapshotRepositories_spec_initProvider_gcs_item "basePath" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_gcs_item "bucket" }}
+        bucket: {{ index $snapshotRepositories_spec_initProvider_gcs_item "bucket" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_gcs_item "chunkSize" }}
+        chunkSize: {{ index $snapshotRepositories_spec_initProvider_gcs_item "chunkSize" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_gcs_item "client" }}
+        client: {{ index $snapshotRepositories_spec_initProvider_gcs_item "client" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_gcs_item "compress" }}
+        compress: {{ index $snapshotRepositories_spec_initProvider_gcs_item "compress" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_gcs_item "maxRestoreBytesPerSec" }}
+        maxRestoreBytesPerSec: {{ index $snapshotRepositories_spec_initProvider_gcs_item "maxRestoreBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_gcs_item "maxSnapshotBytesPerSec" }}
+        maxSnapshotBytesPerSec: {{ index $snapshotRepositories_spec_initProvider_gcs_item "maxSnapshotBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_gcs_item "readonly" }}
+        readonly: {{ index $snapshotRepositories_spec_initProvider_gcs_item "readonly" }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $snapshotRepositories_spec_initProvider "hdfs" }}
+    {{- $snapshotRepositories_spec_initProvider_hdfs := default (list) (index $snapshotRepositories_spec_initProvider "hdfs") }}
+    hdfs:
+    {{- range $snapshotRepositories_spec_initProvider_hdfs_item := $snapshotRepositories_spec_initProvider_hdfs }}
+      -
+        {{- if hasKey $snapshotRepositories_spec_initProvider_hdfs_item "chunkSize" }}
+        chunkSize: {{ index $snapshotRepositories_spec_initProvider_hdfs_item "chunkSize" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_hdfs_item "compress" }}
+        compress: {{ index $snapshotRepositories_spec_initProvider_hdfs_item "compress" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_hdfs_item "loadDefaults" }}
+        loadDefaults: {{ index $snapshotRepositories_spec_initProvider_hdfs_item "loadDefaults" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_hdfs_item "maxRestoreBytesPerSec" }}
+        maxRestoreBytesPerSec: {{ index $snapshotRepositories_spec_initProvider_hdfs_item "maxRestoreBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_hdfs_item "maxSnapshotBytesPerSec" }}
+        maxSnapshotBytesPerSec: {{ index $snapshotRepositories_spec_initProvider_hdfs_item "maxSnapshotBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_hdfs_item "path" }}
+        path: {{ index $snapshotRepositories_spec_initProvider_hdfs_item "path" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_hdfs_item "readonly" }}
+        readonly: {{ index $snapshotRepositories_spec_initProvider_hdfs_item "readonly" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_hdfs_item "uri" }}
+        uri: {{ index $snapshotRepositories_spec_initProvider_hdfs_item "uri" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $snapshotRepositories_spec_initProvider "s3" }}
+    {{- $snapshotRepositories_spec_initProvider_s3 := default (list) (index $snapshotRepositories_spec_initProvider "s3") }}
+    s3:
+    {{- range $snapshotRepositories_spec_initProvider_s3_item := $snapshotRepositories_spec_initProvider_s3 }}
+      -
+        {{- if hasKey $snapshotRepositories_spec_initProvider_s3_item "basePath" }}
+        basePath: {{ index $snapshotRepositories_spec_initProvider_s3_item "basePath" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_s3_item "bucket" }}
+        bucket: {{ index $snapshotRepositories_spec_initProvider_s3_item "bucket" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_s3_item "bufferSize" }}
+        bufferSize: {{ index $snapshotRepositories_spec_initProvider_s3_item "bufferSize" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_s3_item "cannedAcl" }}
+        cannedAcl: {{ index $snapshotRepositories_spec_initProvider_s3_item "cannedAcl" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_s3_item "chunkSize" }}
+        chunkSize: {{ index $snapshotRepositories_spec_initProvider_s3_item "chunkSize" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_s3_item "client" }}
+        client: {{ index $snapshotRepositories_spec_initProvider_s3_item "client" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_s3_item "compress" }}
+        compress: {{ index $snapshotRepositories_spec_initProvider_s3_item "compress" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_s3_item "endpoint" }}
+        endpoint: {{ index $snapshotRepositories_spec_initProvider_s3_item "endpoint" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_s3_item "maxRestoreBytesPerSec" }}
+        maxRestoreBytesPerSec: {{ index $snapshotRepositories_spec_initProvider_s3_item "maxRestoreBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_s3_item "maxSnapshotBytesPerSec" }}
+        maxSnapshotBytesPerSec: {{ index $snapshotRepositories_spec_initProvider_s3_item "maxSnapshotBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_s3_item "pathStyleAccess" }}
+        pathStyleAccess: {{ index $snapshotRepositories_spec_initProvider_s3_item "pathStyleAccess" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_s3_item "readonly" }}
+        readonly: {{ index $snapshotRepositories_spec_initProvider_s3_item "readonly" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_s3_item "serverSideEncryption" }}
+        serverSideEncryption: {{ index $snapshotRepositories_spec_initProvider_s3_item "serverSideEncryption" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_s3_item "storageClass" }}
+        storageClass: {{ index $snapshotRepositories_spec_initProvider_s3_item "storageClass" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $snapshotRepositories_spec_initProvider "url" }}
+    {{- $snapshotRepositories_spec_initProvider_url := default (list) (index $snapshotRepositories_spec_initProvider "url") }}
+    url:
+    {{- range $snapshotRepositories_spec_initProvider_url_item := $snapshotRepositories_spec_initProvider_url }}
+      -
+        {{- if hasKey $snapshotRepositories_spec_initProvider_url_item "chunkSize" }}
+        chunkSize: {{ index $snapshotRepositories_spec_initProvider_url_item "chunkSize" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_url_item "compress" }}
+        compress: {{ index $snapshotRepositories_spec_initProvider_url_item "compress" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_url_item "httpMaxRetries" }}
+        httpMaxRetries: {{ index $snapshotRepositories_spec_initProvider_url_item "httpMaxRetries" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_url_item "httpSocketTimeout" }}
+        httpSocketTimeout: {{ index $snapshotRepositories_spec_initProvider_url_item "httpSocketTimeout" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_url_item "maxNumberOfSnapshots" }}
+        maxNumberOfSnapshots: {{ index $snapshotRepositories_spec_initProvider_url_item "maxNumberOfSnapshots" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_url_item "maxRestoreBytesPerSec" }}
+        maxRestoreBytesPerSec: {{ index $snapshotRepositories_spec_initProvider_url_item "maxRestoreBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_url_item "maxSnapshotBytesPerSec" }}
+        maxSnapshotBytesPerSec: {{ index $snapshotRepositories_spec_initProvider_url_item "maxSnapshotBytesPerSec" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_url_item "readonly" }}
+        readonly: {{ index $snapshotRepositories_spec_initProvider_url_item "readonly" }}
+        {{- end }}
+        {{- if hasKey $snapshotRepositories_spec_initProvider_url_item "url" }}
+        url: {{ index $snapshotRepositories_spec_initProvider_url_item "url" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $snapshotRepositories_spec_initProvider "verify" }}
+    verify: {{ index $snapshotRepositories_spec_initProvider "verify" }}
+    {{- end }}
+  {{- end }}
+  {{- if hasKey $spec "managementPolicies" }}
+  {{- $snapshotRepositories_spec_managementPolicies := default (list) (index $spec "managementPolicies") }}
+  managementPolicies:
+    {{- toYaml $snapshotRepositories_spec_managementPolicies | nindent 4 }}
+  {{- end }}
+  {{- if hasKey $spec "providerConfigRef" }}
+  {{- $snapshotRepositories_spec_providerConfigRef := default (dict) (index $spec "providerConfigRef") }}
+  providerConfigRef:
+    {{- if hasKey $snapshotRepositories_spec_providerConfigRef "kind" }}
+    kind: {{ index $snapshotRepositories_spec_providerConfigRef "kind" | quote }}
+    {{- end }}
+    {{- if hasKey $snapshotRepositories_spec_providerConfigRef "name" }}
+    name: {{ index $snapshotRepositories_spec_providerConfigRef "name" | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if hasKey $spec "writeConnectionSecretToRef" }}
+  {{- $snapshotRepositories_spec_writeConnectionSecretToRef := default (dict) (index $spec "writeConnectionSecretToRef") }}
+  writeConnectionSecretToRef:
+    {{- if hasKey $snapshotRepositories_spec_writeConnectionSecretToRef "name" }}
+    name: {{ index $snapshotRepositories_spec_writeConnectionSecretToRef "name" | quote }}
+    {{- end }}
+  {{- end }}
+{{- if lt (add1 $index) (len $.Values.snapshotRepositories ) }}
+---
+{{- end }}
+{{- end }}

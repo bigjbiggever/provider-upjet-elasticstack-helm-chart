@@ -1,0 +1,346 @@
+{{- range $index, $resource := .Values.elasticsearchUsers }}
+apiVersion: security.elasticstack.m.crossplane.io/v1alpha1
+kind: ElasticsearchUser
+metadata:
+  name: {{ required (printf "%s[%d].name is required" "elasticsearchUsers" $index) $resource.name }}
+  namespace: {{ default $.Release.Namespace $resource.namespace }}
+  {{- if or $resource.annotations $resource.externalName }}
+  annotations:
+    {{- if $resource.externalName }}
+    crossplane.io/external-name: {{ $resource.externalName | quote }}
+    {{- end }}
+    {{- with $resource.annotations }}
+{{ toYaml . | indent 4 }}
+    {{- end }}
+  {{- end }}
+  {{- if $resource.labels }}
+  labels:
+{{ toYaml $resource.labels | indent 4 }}
+  {{- end }}
+{{- $spec := default (dict) $resource.spec }}
+spec:
+  {{- if hasKey $spec "forProvider" }}
+  {{- $elasticsearchUsers_spec_forProvider := default (dict) (index $spec "forProvider") }}
+  forProvider:
+    {{- if hasKey $elasticsearchUsers_spec_forProvider "elasticsearchConnection" }}
+    {{- $elasticsearchUsers_spec_forProvider_elasticsearchConnection := default (list) (index $elasticsearchUsers_spec_forProvider "elasticsearchConnection") }}
+    elasticsearchConnection:
+    {{- range $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item := $elasticsearchUsers_spec_forProvider_elasticsearchConnection }}
+      -
+        {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "apiKeySecretRef" }}
+        {{- $elasticsearchUsers_spec_forProvider_elasticsearchConnection_apiKeySecretRef := default (dict) (index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "apiKeySecretRef") }}
+        apiKeySecretRef:
+          {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_apiKeySecretRef "key" }}
+          key: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_apiKeySecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_apiKeySecretRef "name" }}
+          name: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_apiKeySecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "bearerTokenSecretRef" }}
+        {{- $elasticsearchUsers_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef := default (dict) (index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "bearerTokenSecretRef") }}
+        bearerTokenSecretRef:
+          {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "key" }}
+          key: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "name" }}
+          name: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "caData" }}
+        caData: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "caData" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "caFile" }}
+        caFile: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "caFile" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "certData" }}
+        certData: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "certData" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "certFile" }}
+        certFile: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "certFile" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "endpointsSecretRef" }}
+        {{- $elasticsearchUsers_spec_forProvider_elasticsearchConnection_endpointsSecretRef := default (list) (index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "endpointsSecretRef") }}
+        endpointsSecretRef:
+        {{- range $elasticsearchUsers_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item := $elasticsearchUsers_spec_forProvider_elasticsearchConnection_endpointsSecretRef }}
+          -
+            {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "key" }}
+            key: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "key" | quote }}
+            {{- end }}
+            {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "name" }}
+            name: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "name" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef" }}
+        {{- $elasticsearchUsers_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef := default (dict) (index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef") }}
+        esClientAuthenticationSecretRef:
+          {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" }}
+          key: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" }}
+          name: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "headersSecretRef" }}
+        {{- $elasticsearchUsers_spec_forProvider_elasticsearchConnection_headersSecretRef := default (dict) (index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "headersSecretRef") }}
+        headersSecretRef:
+          {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_headersSecretRef "name" }}
+          name: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_headersSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "insecure" }}
+        insecure: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "insecure" }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "keyDataSecretRef" }}
+        {{- $elasticsearchUsers_spec_forProvider_elasticsearchConnection_keyDataSecretRef := default (dict) (index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "keyDataSecretRef") }}
+        keyDataSecretRef:
+          {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_keyDataSecretRef "key" }}
+          key: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_keyDataSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_keyDataSecretRef "name" }}
+          name: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_keyDataSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "keyFile" }}
+        keyFile: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "keyFile" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "passwordSecretRef" }}
+        {{- $elasticsearchUsers_spec_forProvider_elasticsearchConnection_passwordSecretRef := default (dict) (index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "passwordSecretRef") }}
+        passwordSecretRef:
+          {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_passwordSecretRef "key" }}
+          key: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_passwordSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_passwordSecretRef "name" }}
+          name: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_passwordSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "username" }}
+        username: {{ index $elasticsearchUsers_spec_forProvider_elasticsearchConnection_item "username" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_forProvider "email" }}
+    email: {{ index $elasticsearchUsers_spec_forProvider "email" | quote }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_forProvider "enabled" }}
+    enabled: {{ index $elasticsearchUsers_spec_forProvider "enabled" }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_forProvider "fullName" }}
+    fullName: {{ index $elasticsearchUsers_spec_forProvider "fullName" | quote }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_forProvider "metadata" }}
+    metadata: {{ index $elasticsearchUsers_spec_forProvider "metadata" | quote }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_forProvider "passwordHashSecretRef" }}
+    {{- $elasticsearchUsers_spec_forProvider_passwordHashSecretRef := default (dict) (index $elasticsearchUsers_spec_forProvider "passwordHashSecretRef") }}
+    passwordHashSecretRef:
+      {{- if hasKey $elasticsearchUsers_spec_forProvider_passwordHashSecretRef "key" }}
+      key: {{ index $elasticsearchUsers_spec_forProvider_passwordHashSecretRef "key" | quote }}
+      {{- end }}
+      {{- if hasKey $elasticsearchUsers_spec_forProvider_passwordHashSecretRef "name" }}
+      name: {{ index $elasticsearchUsers_spec_forProvider_passwordHashSecretRef "name" | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_forProvider "passwordSecretRef" }}
+    {{- $elasticsearchUsers_spec_forProvider_passwordSecretRef := default (dict) (index $elasticsearchUsers_spec_forProvider "passwordSecretRef") }}
+    passwordSecretRef:
+      {{- if hasKey $elasticsearchUsers_spec_forProvider_passwordSecretRef "key" }}
+      key: {{ index $elasticsearchUsers_spec_forProvider_passwordSecretRef "key" | quote }}
+      {{- end }}
+      {{- if hasKey $elasticsearchUsers_spec_forProvider_passwordSecretRef "name" }}
+      name: {{ index $elasticsearchUsers_spec_forProvider_passwordSecretRef "name" | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_forProvider "passwordWoSecretRef" }}
+    {{- $elasticsearchUsers_spec_forProvider_passwordWoSecretRef := default (dict) (index $elasticsearchUsers_spec_forProvider "passwordWoSecretRef") }}
+    passwordWoSecretRef:
+      {{- if hasKey $elasticsearchUsers_spec_forProvider_passwordWoSecretRef "key" }}
+      key: {{ index $elasticsearchUsers_spec_forProvider_passwordWoSecretRef "key" | quote }}
+      {{- end }}
+      {{- if hasKey $elasticsearchUsers_spec_forProvider_passwordWoSecretRef "name" }}
+      name: {{ index $elasticsearchUsers_spec_forProvider_passwordWoSecretRef "name" | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_forProvider "passwordWoVersion" }}
+    passwordWoVersion: {{ index $elasticsearchUsers_spec_forProvider "passwordWoVersion" | quote }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_forProvider "roles" }}
+    {{- $elasticsearchUsers_spec_forProvider_roles := default (list) (index $elasticsearchUsers_spec_forProvider "roles") }}
+    roles:
+      {{- toYaml $elasticsearchUsers_spec_forProvider_roles | nindent 6 }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_forProvider "username" }}
+    username: {{ index $elasticsearchUsers_spec_forProvider "username" | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if hasKey $spec "initProvider" }}
+  {{- $elasticsearchUsers_spec_initProvider := default (dict) (index $spec "initProvider") }}
+  initProvider:
+    {{- if hasKey $elasticsearchUsers_spec_initProvider "elasticsearchConnection" }}
+    {{- $elasticsearchUsers_spec_initProvider_elasticsearchConnection := default (list) (index $elasticsearchUsers_spec_initProvider "elasticsearchConnection") }}
+    elasticsearchConnection:
+    {{- range $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item := $elasticsearchUsers_spec_initProvider_elasticsearchConnection }}
+      -
+        {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "apiKeySecretRef" }}
+        {{- $elasticsearchUsers_spec_initProvider_elasticsearchConnection_apiKeySecretRef := default (dict) (index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "apiKeySecretRef") }}
+        apiKeySecretRef:
+          {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_apiKeySecretRef "key" }}
+          key: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_apiKeySecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_apiKeySecretRef "name" }}
+          name: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_apiKeySecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "bearerTokenSecretRef" }}
+        {{- $elasticsearchUsers_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef := default (dict) (index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "bearerTokenSecretRef") }}
+        bearerTokenSecretRef:
+          {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "key" }}
+          key: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "name" }}
+          name: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "caData" }}
+        caData: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "caData" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "caFile" }}
+        caFile: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "caFile" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "certData" }}
+        certData: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "certData" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "certFile" }}
+        certFile: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "certFile" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "endpointsSecretRef" }}
+        {{- $elasticsearchUsers_spec_initProvider_elasticsearchConnection_endpointsSecretRef := default (list) (index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "endpointsSecretRef") }}
+        endpointsSecretRef:
+          {{- toYaml $elasticsearchUsers_spec_initProvider_elasticsearchConnection_endpointsSecretRef | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef" }}
+        {{- $elasticsearchUsers_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef := default (dict) (index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef") }}
+        esClientAuthenticationSecretRef:
+          {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" }}
+          key: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" }}
+          name: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "headersSecretRef" }}
+        headersSecretRef:
+          {{- toYaml (default (dict) (index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "headersSecretRef")) | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "insecure" }}
+        insecure: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "insecure" }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "keyDataSecretRef" }}
+        {{- $elasticsearchUsers_spec_initProvider_elasticsearchConnection_keyDataSecretRef := default (dict) (index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "keyDataSecretRef") }}
+        keyDataSecretRef:
+          {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_keyDataSecretRef "key" }}
+          key: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_keyDataSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_keyDataSecretRef "name" }}
+          name: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_keyDataSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "keyFile" }}
+        keyFile: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "keyFile" | quote }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "passwordSecretRef" }}
+        {{- $elasticsearchUsers_spec_initProvider_elasticsearchConnection_passwordSecretRef := default (dict) (index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "passwordSecretRef") }}
+        passwordSecretRef:
+          {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_passwordSecretRef "key" }}
+          key: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_passwordSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_passwordSecretRef "name" }}
+          name: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_passwordSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "username" }}
+        username: {{ index $elasticsearchUsers_spec_initProvider_elasticsearchConnection_item "username" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_initProvider "email" }}
+    email: {{ index $elasticsearchUsers_spec_initProvider "email" | quote }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_initProvider "enabled" }}
+    enabled: {{ index $elasticsearchUsers_spec_initProvider "enabled" }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_initProvider "fullName" }}
+    fullName: {{ index $elasticsearchUsers_spec_initProvider "fullName" | quote }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_initProvider "metadata" }}
+    metadata: {{ index $elasticsearchUsers_spec_initProvider "metadata" | quote }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_initProvider "passwordHashSecretRef" }}
+    {{- $elasticsearchUsers_spec_initProvider_passwordHashSecretRef := default (dict) (index $elasticsearchUsers_spec_initProvider "passwordHashSecretRef") }}
+    passwordHashSecretRef:
+      {{- if hasKey $elasticsearchUsers_spec_initProvider_passwordHashSecretRef "key" }}
+      key: {{ index $elasticsearchUsers_spec_initProvider_passwordHashSecretRef "key" | quote }}
+      {{- end }}
+      {{- if hasKey $elasticsearchUsers_spec_initProvider_passwordHashSecretRef "name" }}
+      name: {{ index $elasticsearchUsers_spec_initProvider_passwordHashSecretRef "name" | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_initProvider "passwordSecretRef" }}
+    {{- $elasticsearchUsers_spec_initProvider_passwordSecretRef := default (dict) (index $elasticsearchUsers_spec_initProvider "passwordSecretRef") }}
+    passwordSecretRef:
+      {{- if hasKey $elasticsearchUsers_spec_initProvider_passwordSecretRef "key" }}
+      key: {{ index $elasticsearchUsers_spec_initProvider_passwordSecretRef "key" | quote }}
+      {{- end }}
+      {{- if hasKey $elasticsearchUsers_spec_initProvider_passwordSecretRef "name" }}
+      name: {{ index $elasticsearchUsers_spec_initProvider_passwordSecretRef "name" | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_initProvider "passwordWoSecretRef" }}
+    {{- $elasticsearchUsers_spec_initProvider_passwordWoSecretRef := default (dict) (index $elasticsearchUsers_spec_initProvider "passwordWoSecretRef") }}
+    passwordWoSecretRef:
+      {{- if hasKey $elasticsearchUsers_spec_initProvider_passwordWoSecretRef "key" }}
+      key: {{ index $elasticsearchUsers_spec_initProvider_passwordWoSecretRef "key" | quote }}
+      {{- end }}
+      {{- if hasKey $elasticsearchUsers_spec_initProvider_passwordWoSecretRef "name" }}
+      name: {{ index $elasticsearchUsers_spec_initProvider_passwordWoSecretRef "name" | quote }}
+      {{- end }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_initProvider "passwordWoVersion" }}
+    passwordWoVersion: {{ index $elasticsearchUsers_spec_initProvider "passwordWoVersion" | quote }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_initProvider "roles" }}
+    {{- $elasticsearchUsers_spec_initProvider_roles := default (list) (index $elasticsearchUsers_spec_initProvider "roles") }}
+    roles:
+      {{- toYaml $elasticsearchUsers_spec_initProvider_roles | nindent 6 }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_initProvider "username" }}
+    username: {{ index $elasticsearchUsers_spec_initProvider "username" | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if hasKey $spec "managementPolicies" }}
+  {{- $elasticsearchUsers_spec_managementPolicies := default (list) (index $spec "managementPolicies") }}
+  managementPolicies:
+    {{- toYaml $elasticsearchUsers_spec_managementPolicies | nindent 4 }}
+  {{- end }}
+  {{- if hasKey $spec "providerConfigRef" }}
+  {{- $elasticsearchUsers_spec_providerConfigRef := default (dict) (index $spec "providerConfigRef") }}
+  providerConfigRef:
+    {{- if hasKey $elasticsearchUsers_spec_providerConfigRef "kind" }}
+    kind: {{ index $elasticsearchUsers_spec_providerConfigRef "kind" | quote }}
+    {{- end }}
+    {{- if hasKey $elasticsearchUsers_spec_providerConfigRef "name" }}
+    name: {{ index $elasticsearchUsers_spec_providerConfigRef "name" | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if hasKey $spec "writeConnectionSecretToRef" }}
+  {{- $elasticsearchUsers_spec_writeConnectionSecretToRef := default (dict) (index $spec "writeConnectionSecretToRef") }}
+  writeConnectionSecretToRef:
+    {{- if hasKey $elasticsearchUsers_spec_writeConnectionSecretToRef "name" }}
+    name: {{ index $elasticsearchUsers_spec_writeConnectionSecretToRef "name" | quote }}
+    {{- end }}
+  {{- end }}
+{{- if lt (add1 $index) (len $.Values.elasticsearchUsers ) }}
+---
+{{- end }}
+{{- end }}

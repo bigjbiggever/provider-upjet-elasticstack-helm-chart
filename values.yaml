@@ -1,0 +1,578 @@
+# Top-level values only. Each list supports multiple resources via Helm range.
+
+# -- List of namespaced `ClusterSettings` managed resources. `persistent` and `transient` use `settingName: value` or `settingName: [values...]` and are translated to the provider CRD structure by the template.
+# @default -- `[]` (see the commented example below for the full schema)
+clusterSettings: []
+# - name: example-cluster-settings
+#   namespace: default
+#   annotations: {}
+#   labels: {}
+#   externalName: ''
+#   spec:
+#     forProvider:
+#       elasticsearchConnection: {}
+#       persistent:
+#         action.auto_create_index: "false"
+#         cluster.routing.allocation.exclude._name:
+#         - node-a
+#         - node-b
+#       transient:
+#         indices.recovery.max_bytes_per_sec: 100mb
+#     initProvider:
+#       elasticsearchConnection: {}
+#       persistent:
+#         action.auto_create_index: "false"
+#       transient:
+#         indices.recovery.max_bytes_per_sec: 100mb
+#     managementPolicies:
+#     - "*"
+#     providerConfigRef:
+#       kind: ClusterProviderConfig
+#       name: default
+#     writeConnectionSecretToRef:
+#       name: ''
+
+# -- List of namespaced `IndexLifecycle` managed resources.
+# @default -- `[]` (see the commented example below for the full schema)
+indexLifecycles: []
+# - name: example-index-lifecycle
+#   namespace: default
+#   annotations: {}
+#   labels: {}
+#   externalName: ''
+#   spec:
+#     forProvider:
+#       cold:
+#       - allocate:
+#         - exclude: ''
+#           include: ''
+#           numberOfReplicas: 0
+#           require: ''
+#           totalShardsPerNode: 0
+#         downsample:
+#         - fixedInterval: ''
+#           waitTimeout: ''
+#         freeze:
+#         - enabled: false
+#         migrate:
+#         - enabled: false
+#         minAge: ''
+#         readonly:
+#         - enabled: false
+#         searchableSnapshot:
+#         - forceMergeIndex: false
+#           snapshotRepository: ''
+#         setPriority:
+#         - priority: 0
+#         unfollow:
+#         - enabled: false
+#       delete:
+#       - delete:
+#         - deleteSearchableSnapshot: false
+#         minAge: ''
+#         waitForSnapshot:
+#         - policy: ''
+#       elasticsearchConnection: {}
+#       frozen:
+#       - minAge: ''
+#         searchableSnapshot:
+#         - forceMergeIndex: false
+#           snapshotRepository: ''
+#       hot:
+#       - downsample:
+#         - fixedInterval: ''
+#           waitTimeout: ''
+#         forcemerge:
+#         - indexCodec: ''
+#           maxNumSegments: 0
+#         minAge: ''
+#         readonly:
+#         - enabled: false
+#         rollover:
+#         - maxAge: ''
+#           maxDocs: 0
+#           maxPrimaryShardDocs: 0
+#           maxPrimaryShardSize: ''
+#           maxSize: ''
+#           minAge: ''
+#           minDocs: 0
+#           minPrimaryShardDocs: 0
+#           minPrimaryShardSize: ''
+#           minSize: ''
+#         searchableSnapshot:
+#         - forceMergeIndex: false
+#           snapshotRepository: ''
+#         setPriority:
+#         - priority: 0
+#         shrink:
+#         - allowWriteAfterShrink: false
+#           maxPrimaryShardSize: ''
+#           numberOfShards: 0
+#         unfollow:
+#         - enabled: false
+#       metadata: ''
+#       warm:
+#       - allocate:
+#         - exclude: ''
+#           include: ''
+#           numberOfReplicas: 0
+#           require: ''
+#           totalShardsPerNode: 0
+#         downsample:
+#         - fixedInterval: ''
+#           waitTimeout: ''
+#         forcemerge:
+#         - indexCodec: ''
+#           maxNumSegments: 0
+#         migrate:
+#         - enabled: false
+#         minAge: ''
+#         readonly:
+#         - enabled: false
+#         setPriority:
+#         - priority: 0
+#         shrink:
+#         - allowWriteAfterShrink: false
+#           maxPrimaryShardSize: ''
+#           numberOfShards: 0
+#         unfollow:
+#         - enabled: false
+#     initProvider:
+#       cold:
+#       - allocate:
+#         - exclude: ''
+#           include: ''
+#           numberOfReplicas: 0
+#           require: ''
+#           totalShardsPerNode: 0
+#         downsample:
+#         - fixedInterval: ''
+#           waitTimeout: ''
+#         freeze:
+#         - enabled: false
+#         migrate:
+#         - enabled: false
+#         minAge: ''
+#         readonly:
+#         - enabled: false
+#         searchableSnapshot:
+#         - forceMergeIndex: false
+#           snapshotRepository: ''
+#         setPriority:
+#         - priority: 0
+#         unfollow:
+#         - enabled: false
+#       delete:
+#       - delete:
+#         - deleteSearchableSnapshot: false
+#         minAge: ''
+#         waitForSnapshot:
+#         - policy: ''
+#       elasticsearchConnection: {}
+#       frozen:
+#       - minAge: ''
+#         searchableSnapshot:
+#         - forceMergeIndex: false
+#           snapshotRepository: ''
+#       hot:
+#       - downsample:
+#         - fixedInterval: ''
+#           waitTimeout: ''
+#         forcemerge:
+#         - indexCodec: ''
+#           maxNumSegments: 0
+#         minAge: ''
+#         readonly:
+#         - enabled: false
+#         rollover:
+#         - maxAge: ''
+#           maxDocs: 0
+#           maxPrimaryShardDocs: 0
+#           maxPrimaryShardSize: ''
+#           maxSize: ''
+#           minAge: ''
+#           minDocs: 0
+#           minPrimaryShardDocs: 0
+#           minPrimaryShardSize: ''
+#           minSize: ''
+#         searchableSnapshot:
+#         - forceMergeIndex: false
+#           snapshotRepository: ''
+#         setPriority:
+#         - priority: 0
+#         shrink:
+#         - allowWriteAfterShrink: false
+#           maxPrimaryShardSize: ''
+#           numberOfShards: 0
+#         unfollow:
+#         - enabled: false
+#       metadata: ''
+#       warm:
+#       - allocate:
+#         - exclude: ''
+#           include: ''
+#           numberOfReplicas: 0
+#           require: ''
+#           totalShardsPerNode: 0
+#         downsample:
+#         - fixedInterval: ''
+#           waitTimeout: ''
+#         forcemerge:
+#         - indexCodec: ''
+#           maxNumSegments: 0
+#         migrate:
+#         - enabled: false
+#         minAge: ''
+#         readonly:
+#         - enabled: false
+#         setPriority:
+#         - priority: 0
+#         shrink:
+#         - allowWriteAfterShrink: false
+#           maxPrimaryShardSize: ''
+#           numberOfShards: 0
+#         unfollow:
+#         - enabled: false
+#     managementPolicies:
+#     - "*"
+#     providerConfigRef:
+#       kind: ClusterProviderConfig
+#       name: default
+#     writeConnectionSecretToRef:
+#       name: ''
+
+# -- List of namespaced `ElasticsearchRole` managed resources.
+# @default -- `[]` (see the commented example below for the full schema)
+elasticsearchRoles: []
+# - name: example-elasticsearch-role
+#   namespace: default
+#   annotations: {}
+#   labels: {}
+#   externalName: ''
+#   spec:
+#     forProvider:
+#       applications:
+#       - application: ''
+#         privileges: []
+#         resources: []
+#       cluster: []
+#       description: ''
+#       elasticsearchConnection: {}
+#       global: ''
+#       indices:
+#       - allowRestrictedIndices: false
+#         fieldSecurity:
+#         - except: []
+#           grant: []
+#         names: []
+#         privileges: []
+#         query: ''
+#       metadata: ''
+#       remoteIndices:
+#       - clusters: []
+#         fieldSecurity:
+#         - except: []
+#           grant: []
+#         names: []
+#         privileges: []
+#         query: ''
+#       runAs: []
+#     initProvider:
+#       applications:
+#       - application: ''
+#         privileges: []
+#         resources: []
+#       cluster: []
+#       description: ''
+#       elasticsearchConnection: {}
+#       global: ''
+#       indices:
+#       - allowRestrictedIndices: false
+#         fieldSecurity:
+#         - except: []
+#           grant: []
+#         names: []
+#         privileges: []
+#         query: ''
+#       metadata: ''
+#       remoteIndices:
+#       - clusters: []
+#         fieldSecurity:
+#         - except: []
+#           grant: []
+#         names: []
+#         privileges: []
+#         query: ''
+#       runAs: []
+#     managementPolicies:
+#     - "*"
+#     providerConfigRef:
+#       kind: ClusterProviderConfig
+#       name: default
+#     writeConnectionSecretToRef:
+#       name: ''
+
+# -- List of namespaced `ElasticsearchUser` managed resources.
+# @default -- `[]` (see the commented example below for the full schema)
+elasticsearchUsers: []
+# - name: example-elasticsearch-user
+#   namespace: default
+#   annotations: {}
+#   labels: {}
+#   externalName: ''
+#   spec:
+#     forProvider:
+#       elasticsearchConnection: {}
+#       email: ''
+#       enabled: false
+#       fullName: ''
+#       metadata: ''
+#       passwordHashSecretRef:
+#         key: ''
+#         name: ''
+#       passwordSecretRef:
+#         key: ''
+#         name: ''
+#       passwordWoSecretRef:
+#         key: ''
+#         name: ''
+#       passwordWoVersion: ''
+#       roles: []
+#       username: ''
+#     initProvider:
+#       elasticsearchConnection: {}
+#       email: ''
+#       enabled: false
+#       fullName: ''
+#       metadata: ''
+#       passwordHashSecretRef:
+#         key: ''
+#         name: ''
+#       passwordSecretRef:
+#         key: ''
+#         name: ''
+#       passwordWoSecretRef:
+#         key: ''
+#         name: ''
+#       passwordWoVersion: ''
+#       roles: []
+#       username: ''
+#     managementPolicies:
+#     - "*"
+#     providerConfigRef:
+#       kind: ClusterProviderConfig
+#       name: default
+#     writeConnectionSecretToRef:
+#       name: ''
+
+# -- List of namespaced `SnapshotLifecycle` managed resources.
+# @default -- `[]` (see the commented example below for the full schema)
+snapshotLifecycles: []
+# - name: example-snapshot-lifecycle
+#   namespace: default
+#   annotations: {}
+#   labels: {}
+#   externalName: ''
+#   spec:
+#     forProvider:
+#       elasticsearchConnection: {}
+#       expandWildcards: ''
+#       expireAfter: ''
+#       featureStates: []
+#       ignoreUnavailable: false
+#       includeGlobalState: false
+#       indices: []
+#       maxCount: 0
+#       metadata: ''
+#       minCount: 0
+#       partial: false
+#       repository: ''
+#       schedule: ''
+#       snapshotName: ''
+#     initProvider:
+#       elasticsearchConnection: {}
+#       expandWildcards: ''
+#       expireAfter: ''
+#       featureStates: []
+#       ignoreUnavailable: false
+#       includeGlobalState: false
+#       indices: []
+#       maxCount: 0
+#       metadata: ''
+#       minCount: 0
+#       partial: false
+#       repository: ''
+#       schedule: ''
+#       snapshotName: ''
+#     managementPolicies:
+#     - "*"
+#     providerConfigRef:
+#       kind: ClusterProviderConfig
+#       name: default
+#     writeConnectionSecretToRef:
+#       name: ''
+
+# -- List of namespaced `SnapshotRepository` managed resources.
+# @default -- `[]` (see the commented example below for the full schema)
+snapshotRepositories: []
+# - name: example-snapshot-repository
+#   namespace: default
+#   annotations: {}
+#   labels: {}
+#   externalName: ''
+#   spec:
+#     forProvider:
+#       azure:
+#       - basePath: ''
+#         chunkSize: ''
+#         client: ''
+#         compress: false
+#         container: ''
+#         locationMode: ''
+#         maxRestoreBytesPerSec: ''
+#         maxSnapshotBytesPerSec: ''
+#         readonly: false
+#       elasticsearchConnection: {}
+#       fs:
+#       - chunkSize: ''
+#         compress: false
+#         location: ''
+#         maxNumberOfSnapshots: 0
+#         maxRestoreBytesPerSec: ''
+#         maxSnapshotBytesPerSec: ''
+#         readonly: false
+#       gcs:
+#       - basePath: ''
+#         bucket: ''
+#         chunkSize: ''
+#         client: ''
+#         compress: false
+#         maxRestoreBytesPerSec: ''
+#         maxSnapshotBytesPerSec: ''
+#         readonly: false
+#       hdfs:
+#       - chunkSize: ''
+#         compress: false
+#         loadDefaults: false
+#         maxRestoreBytesPerSec: ''
+#         maxSnapshotBytesPerSec: ''
+#         path: ''
+#         readonly: false
+#         uri: ''
+#       s3:
+#       - basePath: ''
+#         bucket: ''
+#         bufferSize: ''
+#         cannedAcl: ''
+#         chunkSize: ''
+#         client: ''
+#         compress: false
+#         endpoint: ''
+#         maxRestoreBytesPerSec: ''
+#         maxSnapshotBytesPerSec: ''
+#         pathStyleAccess: false
+#         readonly: false
+#         serverSideEncryption: false
+#         storageClass: ''
+#       url:
+#       - chunkSize: ''
+#         compress: false
+#         httpMaxRetries: 0
+#         httpSocketTimeout: ''
+#         maxNumberOfSnapshots: 0
+#         maxRestoreBytesPerSec: ''
+#         maxSnapshotBytesPerSec: ''
+#         readonly: false
+#         url: ''
+#       verify: false
+#     initProvider:
+#       azure:
+#       - basePath: ''
+#         chunkSize: ''
+#         client: ''
+#         compress: false
+#         container: ''
+#         locationMode: ''
+#         maxRestoreBytesPerSec: ''
+#         maxSnapshotBytesPerSec: ''
+#         readonly: false
+#       elasticsearchConnection: {}
+#       fs:
+#       - chunkSize: ''
+#         compress: false
+#         location: ''
+#         maxNumberOfSnapshots: 0
+#         maxRestoreBytesPerSec: ''
+#         maxSnapshotBytesPerSec: ''
+#         readonly: false
+#       gcs:
+#       - basePath: ''
+#         bucket: ''
+#         chunkSize: ''
+#         client: ''
+#         compress: false
+#         maxRestoreBytesPerSec: ''
+#         maxSnapshotBytesPerSec: ''
+#         readonly: false
+#       hdfs:
+#       - chunkSize: ''
+#         compress: false
+#         loadDefaults: false
+#         maxRestoreBytesPerSec: ''
+#         maxSnapshotBytesPerSec: ''
+#         path: ''
+#         readonly: false
+#         uri: ''
+#       s3:
+#       - basePath: ''
+#         bucket: ''
+#         bufferSize: ''
+#         cannedAcl: ''
+#         chunkSize: ''
+#         client: ''
+#         compress: false
+#         endpoint: ''
+#         maxRestoreBytesPerSec: ''
+#         maxSnapshotBytesPerSec: ''
+#         pathStyleAccess: false
+#         readonly: false
+#         serverSideEncryption: false
+#         storageClass: ''
+#       url:
+#       - chunkSize: ''
+#         compress: false
+#         httpMaxRetries: 0
+#         httpSocketTimeout: ''
+#         maxNumberOfSnapshots: 0
+#         maxRestoreBytesPerSec: ''
+#         maxSnapshotBytesPerSec: ''
+#         readonly: false
+#         url: ''
+#       verify: false
+#     managementPolicies:
+#     - "*"
+#     providerConfigRef:
+#       kind: ClusterProviderConfig
+#       name: default
+#     writeConnectionSecretToRef:
+#       name: ''
+
+# -- List of namespaced `ProviderConfig` resources used by the managed resources in this chart.
+# @default -- `[]` (see the commented example below for the full schema)
+providerConfigs: []
+# - name: example-provider-config
+#   namespace: default
+#   annotations: {}
+#   labels: {}
+#   externalName: ''
+#   spec:
+#     credentials:
+#       env:
+#         name: ''
+#       fs:
+#         path: ''
+#       secretRef:
+#         key: ''
+#         name: ''
+#         namespace: ''
+#       source: ''

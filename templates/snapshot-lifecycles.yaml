@@ -1,0 +1,326 @@
+{{- range $index, $resource := .Values.snapshotLifecycles }}
+apiVersion: snapshot.elasticstack.m.crossplane.io/v1alpha1
+kind: SnapshotLifecycle
+metadata:
+  name: {{ required (printf "%s[%d].name is required" "snapshotLifecycles" $index) $resource.name }}
+  namespace: {{ default $.Release.Namespace $resource.namespace }}
+  {{- if or $resource.annotations $resource.externalName }}
+  annotations:
+    {{- if $resource.externalName }}
+    crossplane.io/external-name: {{ $resource.externalName | quote }}
+    {{- end }}
+    {{- with $resource.annotations }}
+{{ toYaml . | indent 4 }}
+    {{- end }}
+  {{- end }}
+  {{- if $resource.labels }}
+  labels:
+{{ toYaml $resource.labels | indent 4 }}
+  {{- end }}
+{{- $spec := default (dict) $resource.spec }}
+spec:
+  {{- if hasKey $spec "forProvider" }}
+  {{- $snapshotLifecycles_spec_forProvider := default (dict) (index $spec "forProvider") }}
+  forProvider:
+    {{- if hasKey $snapshotLifecycles_spec_forProvider "elasticsearchConnection" }}
+    {{- $snapshotLifecycles_spec_forProvider_elasticsearchConnection := default (list) (index $snapshotLifecycles_spec_forProvider "elasticsearchConnection") }}
+    elasticsearchConnection:
+    {{- range $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item := $snapshotLifecycles_spec_forProvider_elasticsearchConnection }}
+      -
+        {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "apiKeySecretRef" }}
+        {{- $snapshotLifecycles_spec_forProvider_elasticsearchConnection_apiKeySecretRef := default (dict) (index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "apiKeySecretRef") }}
+        apiKeySecretRef:
+          {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_apiKeySecretRef "key" }}
+          key: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_apiKeySecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_apiKeySecretRef "name" }}
+          name: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_apiKeySecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "bearerTokenSecretRef" }}
+        {{- $snapshotLifecycles_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef := default (dict) (index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "bearerTokenSecretRef") }}
+        bearerTokenSecretRef:
+          {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "key" }}
+          key: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "name" }}
+          name: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_bearerTokenSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "caData" }}
+        caData: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "caData" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "caFile" }}
+        caFile: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "caFile" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "certData" }}
+        certData: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "certData" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "certFile" }}
+        certFile: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "certFile" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "endpointsSecretRef" }}
+        {{- $snapshotLifecycles_spec_forProvider_elasticsearchConnection_endpointsSecretRef := default (list) (index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "endpointsSecretRef") }}
+        endpointsSecretRef:
+        {{- range $snapshotLifecycles_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item := $snapshotLifecycles_spec_forProvider_elasticsearchConnection_endpointsSecretRef }}
+          -
+            {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "key" }}
+            key: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "key" | quote }}
+            {{- end }}
+            {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "name" }}
+            name: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_endpointsSecretRef_item "name" | quote }}
+            {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef" }}
+        {{- $snapshotLifecycles_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef := default (dict) (index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef") }}
+        esClientAuthenticationSecretRef:
+          {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" }}
+          key: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" }}
+          name: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "headersSecretRef" }}
+        {{- $snapshotLifecycles_spec_forProvider_elasticsearchConnection_headersSecretRef := default (dict) (index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "headersSecretRef") }}
+        headersSecretRef:
+          {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_headersSecretRef "name" }}
+          name: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_headersSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "insecure" }}
+        insecure: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "insecure" }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "keyDataSecretRef" }}
+        {{- $snapshotLifecycles_spec_forProvider_elasticsearchConnection_keyDataSecretRef := default (dict) (index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "keyDataSecretRef") }}
+        keyDataSecretRef:
+          {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_keyDataSecretRef "key" }}
+          key: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_keyDataSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_keyDataSecretRef "name" }}
+          name: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_keyDataSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "keyFile" }}
+        keyFile: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "keyFile" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "passwordSecretRef" }}
+        {{- $snapshotLifecycles_spec_forProvider_elasticsearchConnection_passwordSecretRef := default (dict) (index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "passwordSecretRef") }}
+        passwordSecretRef:
+          {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_passwordSecretRef "key" }}
+          key: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_passwordSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_passwordSecretRef "name" }}
+          name: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_passwordSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "username" }}
+        username: {{ index $snapshotLifecycles_spec_forProvider_elasticsearchConnection_item "username" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_forProvider "expandWildcards" }}
+    expandWildcards: {{ index $snapshotLifecycles_spec_forProvider "expandWildcards" | quote }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_forProvider "expireAfter" }}
+    expireAfter: {{ index $snapshotLifecycles_spec_forProvider "expireAfter" | quote }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_forProvider "featureStates" }}
+    {{- $snapshotLifecycles_spec_forProvider_featureStates := default (list) (index $snapshotLifecycles_spec_forProvider "featureStates") }}
+    featureStates:
+      {{- toYaml $snapshotLifecycles_spec_forProvider_featureStates | nindent 6 }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_forProvider "ignoreUnavailable" }}
+    ignoreUnavailable: {{ index $snapshotLifecycles_spec_forProvider "ignoreUnavailable" }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_forProvider "includeGlobalState" }}
+    includeGlobalState: {{ index $snapshotLifecycles_spec_forProvider "includeGlobalState" }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_forProvider "indices" }}
+    {{- $snapshotLifecycles_spec_forProvider_indices := default (list) (index $snapshotLifecycles_spec_forProvider "indices") }}
+    indices:
+      {{- toYaml $snapshotLifecycles_spec_forProvider_indices | nindent 6 }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_forProvider "maxCount" }}
+    maxCount: {{ index $snapshotLifecycles_spec_forProvider "maxCount" }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_forProvider "metadata" }}
+    metadata: {{ index $snapshotLifecycles_spec_forProvider "metadata" | quote }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_forProvider "minCount" }}
+    minCount: {{ index $snapshotLifecycles_spec_forProvider "minCount" }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_forProvider "partial" }}
+    partial: {{ index $snapshotLifecycles_spec_forProvider "partial" }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_forProvider "repository" }}
+    repository: {{ index $snapshotLifecycles_spec_forProvider "repository" | quote }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_forProvider "schedule" }}
+    schedule: {{ index $snapshotLifecycles_spec_forProvider "schedule" | quote }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_forProvider "snapshotName" }}
+    snapshotName: {{ index $snapshotLifecycles_spec_forProvider "snapshotName" | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if hasKey $spec "initProvider" }}
+  {{- $snapshotLifecycles_spec_initProvider := default (dict) (index $spec "initProvider") }}
+  initProvider:
+    {{- if hasKey $snapshotLifecycles_spec_initProvider "elasticsearchConnection" }}
+    {{- $snapshotLifecycles_spec_initProvider_elasticsearchConnection := default (list) (index $snapshotLifecycles_spec_initProvider "elasticsearchConnection") }}
+    elasticsearchConnection:
+    {{- range $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item := $snapshotLifecycles_spec_initProvider_elasticsearchConnection }}
+      -
+        {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "apiKeySecretRef" }}
+        {{- $snapshotLifecycles_spec_initProvider_elasticsearchConnection_apiKeySecretRef := default (dict) (index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "apiKeySecretRef") }}
+        apiKeySecretRef:
+          {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_apiKeySecretRef "key" }}
+          key: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_apiKeySecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_apiKeySecretRef "name" }}
+          name: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_apiKeySecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "bearerTokenSecretRef" }}
+        {{- $snapshotLifecycles_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef := default (dict) (index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "bearerTokenSecretRef") }}
+        bearerTokenSecretRef:
+          {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "key" }}
+          key: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "name" }}
+          name: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_bearerTokenSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "caData" }}
+        caData: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "caData" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "caFile" }}
+        caFile: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "caFile" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "certData" }}
+        certData: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "certData" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "certFile" }}
+        certFile: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "certFile" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "endpointsSecretRef" }}
+        {{- $snapshotLifecycles_spec_initProvider_elasticsearchConnection_endpointsSecretRef := default (list) (index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "endpointsSecretRef") }}
+        endpointsSecretRef:
+          {{- toYaml $snapshotLifecycles_spec_initProvider_elasticsearchConnection_endpointsSecretRef | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef" }}
+        {{- $snapshotLifecycles_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef := default (dict) (index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "esClientAuthenticationSecretRef") }}
+        esClientAuthenticationSecretRef:
+          {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" }}
+          key: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" }}
+          name: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_esClientAuthenticationSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "headersSecretRef" }}
+        headersSecretRef:
+          {{- toYaml (default (dict) (index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "headersSecretRef")) | nindent 10 }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "insecure" }}
+        insecure: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "insecure" }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "keyDataSecretRef" }}
+        {{- $snapshotLifecycles_spec_initProvider_elasticsearchConnection_keyDataSecretRef := default (dict) (index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "keyDataSecretRef") }}
+        keyDataSecretRef:
+          {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_keyDataSecretRef "key" }}
+          key: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_keyDataSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_keyDataSecretRef "name" }}
+          name: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_keyDataSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "keyFile" }}
+        keyFile: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "keyFile" | quote }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "passwordSecretRef" }}
+        {{- $snapshotLifecycles_spec_initProvider_elasticsearchConnection_passwordSecretRef := default (dict) (index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "passwordSecretRef") }}
+        passwordSecretRef:
+          {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_passwordSecretRef "key" }}
+          key: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_passwordSecretRef "key" | quote }}
+          {{- end }}
+          {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_passwordSecretRef "name" }}
+          name: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_passwordSecretRef "name" | quote }}
+          {{- end }}
+        {{- end }}
+        {{- if hasKey $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "username" }}
+        username: {{ index $snapshotLifecycles_spec_initProvider_elasticsearchConnection_item "username" | quote }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_initProvider "expandWildcards" }}
+    expandWildcards: {{ index $snapshotLifecycles_spec_initProvider "expandWildcards" | quote }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_initProvider "expireAfter" }}
+    expireAfter: {{ index $snapshotLifecycles_spec_initProvider "expireAfter" | quote }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_initProvider "featureStates" }}
+    {{- $snapshotLifecycles_spec_initProvider_featureStates := default (list) (index $snapshotLifecycles_spec_initProvider "featureStates") }}
+    featureStates:
+      {{- toYaml $snapshotLifecycles_spec_initProvider_featureStates | nindent 6 }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_initProvider "ignoreUnavailable" }}
+    ignoreUnavailable: {{ index $snapshotLifecycles_spec_initProvider "ignoreUnavailable" }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_initProvider "includeGlobalState" }}
+    includeGlobalState: {{ index $snapshotLifecycles_spec_initProvider "includeGlobalState" }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_initProvider "indices" }}
+    {{- $snapshotLifecycles_spec_initProvider_indices := default (list) (index $snapshotLifecycles_spec_initProvider "indices") }}
+    indices:
+      {{- toYaml $snapshotLifecycles_spec_initProvider_indices | nindent 6 }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_initProvider "maxCount" }}
+    maxCount: {{ index $snapshotLifecycles_spec_initProvider "maxCount" }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_initProvider "metadata" }}
+    metadata: {{ index $snapshotLifecycles_spec_initProvider "metadata" | quote }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_initProvider "minCount" }}
+    minCount: {{ index $snapshotLifecycles_spec_initProvider "minCount" }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_initProvider "partial" }}
+    partial: {{ index $snapshotLifecycles_spec_initProvider "partial" }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_initProvider "repository" }}
+    repository: {{ index $snapshotLifecycles_spec_initProvider "repository" | quote }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_initProvider "schedule" }}
+    schedule: {{ index $snapshotLifecycles_spec_initProvider "schedule" | quote }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_initProvider "snapshotName" }}
+    snapshotName: {{ index $snapshotLifecycles_spec_initProvider "snapshotName" | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if hasKey $spec "managementPolicies" }}
+  {{- $snapshotLifecycles_spec_managementPolicies := default (list) (index $spec "managementPolicies") }}
+  managementPolicies:
+    {{- toYaml $snapshotLifecycles_spec_managementPolicies | nindent 4 }}
+  {{- end }}
+  {{- if hasKey $spec "providerConfigRef" }}
+  {{- $snapshotLifecycles_spec_providerConfigRef := default (dict) (index $spec "providerConfigRef") }}
+  providerConfigRef:
+    {{- if hasKey $snapshotLifecycles_spec_providerConfigRef "kind" }}
+    kind: {{ index $snapshotLifecycles_spec_providerConfigRef "kind" | quote }}
+    {{- end }}
+    {{- if hasKey $snapshotLifecycles_spec_providerConfigRef "name" }}
+    name: {{ index $snapshotLifecycles_spec_providerConfigRef "name" | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if hasKey $spec "writeConnectionSecretToRef" }}
+  {{- $snapshotLifecycles_spec_writeConnectionSecretToRef := default (dict) (index $spec "writeConnectionSecretToRef") }}
+  writeConnectionSecretToRef:
+    {{- if hasKey $snapshotLifecycles_spec_writeConnectionSecretToRef "name" }}
+    name: {{ index $snapshotLifecycles_spec_writeConnectionSecretToRef "name" | quote }}
+    {{- end }}
+  {{- end }}
+{{- if lt (add1 $index) (len $.Values.snapshotLifecycles ) }}
+---
+{{- end }}
+{{- end }}
