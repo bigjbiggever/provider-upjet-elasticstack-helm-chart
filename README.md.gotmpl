@@ -22,6 +22,8 @@ Render the chart:
 helm template my-release .
 ```
 
+For `providerConfigs`, you can either provide `spec.credentials` directly or set top-level `username`, `password`, and `endpoints`. When those top-level values are set, the chart creates a Secret named `<providerConfig name>-credentials` with a `credentials` key and wires `spec.credentials.secretRef` automatically.
+
 Regenerate the documentation:
 
 ```bash

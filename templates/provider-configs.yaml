@@ -1,9 +1,28 @@
 {{- range $index, $resource := .Values.providerConfigs }}
+{{- $namespace := default $.Release.Namespace $resource.namespace }}
+{{- $hasInlineCredentials := or $resource.username (or $resource.password $resource.endpoints) }}
+{{- $secretName := printf "%s-credentials" (required (printf "%s[%d].name is required" "providerConfigs" $index) $resource.name) }}
+{{- if $hasInlineCredentials }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $secretName }}
+  namespace: {{ $namespace }}
+type: Opaque
+stringData:
+  credentials: |
+{{ dict
+    "username" (required (printf "%s[%d].username is required when inline provider credentials are used" "providerConfigs" $index) $resource.username)
+    "password" (required (printf "%s[%d].password is required when inline provider credentials are used" "providerConfigs" $index) $resource.password)
+    "endpoints" (required (printf "%s[%d].endpoints is required when inline provider credentials are used" "providerConfigs" $index) $resource.endpoints)
+  | toPrettyJson | indent 4 }}
+---
+{{- end }}
 apiVersion: elasticstack.m.crossplane.io/v1beta1
 kind: ProviderConfig
 metadata:
   name: {{ required (printf "%s[%d].name is required" "providerConfigs" $index) $resource.name }}
-  namespace: {{ default $.Release.Namespace $resource.namespace }}
+  namespace: {{ $namespace }}
   {{- if or $resource.annotations $resource.externalName }}
   annotations:
     {{- if $resource.externalName }}
@@ -19,7 +38,14 @@ metadata:
   {{- end }}
 {{- $spec := default (dict) $resource.spec }}
 spec:
-  {{- if hasKey $spec "credentials" }}
+  {{- if $hasInlineCredentials }}
+  credentials:
+    secretRef:
+      key: credentials
+      name: {{ $secretName | quote }}
+      namespace: {{ $namespace | quote }}
+    source: Secret
+  {{- else if hasKey $spec "credentials" }}
   {{- $providerConfigs_spec_credentials := default (dict) (index $spec "credentials") }}
   credentials:
     {{- if hasKey $providerConfigs_spec_credentials "env" }}

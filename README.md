@@ -22,6 +22,8 @@ Render the chart:
 helm template my-release .
 ```
 
+For `providerConfigs`, you can either provide `spec.credentials` directly or set top-level `username`, `password`, and `endpoints`. When those top-level values are set, the chart creates a Secret named `<providerConfig name>-credentials` with a `credentials` key and wires `spec.credentials.secretRef` automatically.
+
 Regenerate the documentation:
 
 ```bash
@@ -41,4 +43,3 @@ The full example schemas live in `values.yaml` as commented examples below each 
 | snapshotLifecycles | list | `[]` (see the commented example below for the full schema) | List of namespaced `SnapshotLifecycle` managed resources. |
 | snapshotRepositories | list | `[]` (see the commented example below for the full schema) | List of namespaced `SnapshotRepository` managed resources. |
 | providerConfigs | list | `[]` (see the commented example below for the full schema) | List of namespaced `ProviderConfig` resources used by the managed resources in this chart. |
-
