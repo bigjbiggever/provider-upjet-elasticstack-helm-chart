@@ -327,6 +327,7 @@ elasticsearchUsers: []
 #       enabled: false
 #       fullName: ''
 #       metadata: ''
+#       passwordHash: ''
 #       passwordHashSecretRef:
 #         key: ''
 #         name: ''

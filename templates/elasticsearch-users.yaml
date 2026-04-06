@@ -1,9 +1,26 @@
 {{- range $index, $resource := .Values.elasticsearchUsers }}
+{{- $namespace := default $.Release.Namespace $resource.namespace }}
+{{- $resourceName := required (printf "%s[%d].name is required" "elasticsearchUsers" $index) $resource.name }}
+{{- $spec := default (dict) $resource.spec }}
+{{- $forProvider := default (dict) (index $spec "forProvider") }}
+{{- $forProviderPasswordHash := index $forProvider "passwordHash" }}
+{{- $forProviderPasswordHashSecretRef := default (dict) (index $forProvider "passwordHashSecretRef") }}
+{{- if $forProviderPasswordHash }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ default (printf "%s-for-provider-password-hash" $resourceName) (index $forProviderPasswordHashSecretRef "name") }}
+  namespace: {{ $namespace }}
+type: Opaque
+stringData:
+  {{ default "passwordHash" (index $forProviderPasswordHashSecretRef "key") }}: {{ $forProviderPasswordHash | quote }}
+---
+{{- end }}
 apiVersion: security.elasticstack.m.crossplane.io/v1alpha1
 kind: ElasticsearchUser
 metadata:
-  name: {{ required (printf "%s[%d].name is required" "elasticsearchUsers" $index) $resource.name }}
-  namespace: {{ default $.Release.Namespace $resource.namespace }}
+  name: {{ $resourceName }}
+  namespace: {{ $namespace }}
   {{- if or $resource.annotations $resource.externalName }}
   annotations:
     {{- if $resource.externalName }}
@@ -17,7 +34,6 @@ metadata:
   labels:
 {{ toYaml $resource.labels | indent 4 }}
   {{- end }}
-{{- $spec := default (dict) $resource.spec }}
 spec:
   {{- if hasKey $spec "forProvider" }}
   {{- $elasticsearchUsers_spec_forProvider := default (dict) (index $spec "forProvider") }}
@@ -132,15 +148,11 @@ spec:
     {{- if hasKey $elasticsearchUsers_spec_forProvider "metadata" }}
     metadata: {{ index $elasticsearchUsers_spec_forProvider "metadata" | quote }}
     {{- end }}
-    {{- if hasKey $elasticsearchUsers_spec_forProvider "passwordHashSecretRef" }}
-    {{- $elasticsearchUsers_spec_forProvider_passwordHashSecretRef := default (dict) (index $elasticsearchUsers_spec_forProvider "passwordHashSecretRef") }}
+    {{- if or $forProviderPasswordHash (hasKey $elasticsearchUsers_spec_forProvider "passwordHashSecretRef") }}
+    {{- $elasticsearchUsers_spec_forProvider_passwordHashSecretRef := $forProviderPasswordHashSecretRef }}
     passwordHashSecretRef:
-      {{- if hasKey $elasticsearchUsers_spec_forProvider_passwordHashSecretRef "key" }}
-      key: {{ index $elasticsearchUsers_spec_forProvider_passwordHashSecretRef "key" | quote }}
-      {{- end }}
-      {{- if hasKey $elasticsearchUsers_spec_forProvider_passwordHashSecretRef "name" }}
-      name: {{ index $elasticsearchUsers_spec_forProvider_passwordHashSecretRef "name" | quote }}
-      {{- end }}
+      key: {{ default "passwordHash" (index $elasticsearchUsers_spec_forProvider_passwordHashSecretRef "key") | quote }}
+      name: {{ default (printf "%s-for-provider-password-hash" $resourceName) (index $elasticsearchUsers_spec_forProvider_passwordHashSecretRef "name") | quote }}
     {{- end }}
     {{- if hasKey $elasticsearchUsers_spec_forProvider "passwordSecretRef" }}
     {{- $elasticsearchUsers_spec_forProvider_passwordSecretRef := default (dict) (index $elasticsearchUsers_spec_forProvider "passwordSecretRef") }}

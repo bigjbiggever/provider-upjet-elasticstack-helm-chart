@@ -24,6 +24,8 @@ helm template my-release .
 
 For `providerConfigs`, you can either provide `spec.credentials` directly or set top-level `username`, `password`, and `endpoints`. When those top-level values are set, the chart creates a Secret named `<providerConfig name>-credentials` with a `credentials` key and wires `spec.credentials.secretRef` automatically.
 
+For `elasticsearchUsers`, you can set `spec.forProvider.passwordHash` directly in values. The chart creates an Opaque Secret in the resource namespace and wires `passwordHashSecretRef` automatically. If you also set `passwordHashSecretRef.name` and/or `passwordHashSecretRef.key`, those are used for the generated Secret instead of the defaults.
+
 Regenerate the documentation:
 
 ```bash
