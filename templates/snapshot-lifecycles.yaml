@@ -22,6 +22,9 @@ spec:
   {{- if hasKey $spec "forProvider" }}
   {{- $snapshotLifecycles_spec_forProvider := default (dict) (index $spec "forProvider") }}
   forProvider:
+    {{- if hasKey $snapshotLifecycles_spec_forProvider "name" }}
+    name: {{ index $snapshotLifecycles_spec_forProvider "name" | quote }}
+    {{- end }}
     {{- if hasKey $snapshotLifecycles_spec_forProvider "elasticsearchConnection" }}
     {{- $snapshotLifecycles_spec_forProvider_elasticsearchConnection := default (list) (index $snapshotLifecycles_spec_forProvider "elasticsearchConnection") }}
     elasticsearchConnection:
