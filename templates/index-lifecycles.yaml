@@ -22,6 +22,9 @@ spec:
   {{- if hasKey $spec "forProvider" }}
   {{- $indexLifecycles_spec_forProvider := default (dict) (index $spec "forProvider") }}
   forProvider:
+    {{- if hasKey $indexLifecycles_spec_forProvider "name" }}
+    name: {{ index $indexLifecycles_spec_forProvider "name" | quote }}
+    {{- end }}
     {{- if hasKey $indexLifecycles_spec_forProvider "cold" }}
     {{- $indexLifecycles_spec_forProvider_cold := default (list) (index $indexLifecycles_spec_forProvider "cold") }}
     cold:

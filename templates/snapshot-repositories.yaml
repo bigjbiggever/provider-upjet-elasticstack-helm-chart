@@ -22,6 +22,9 @@ spec:
   {{- if hasKey $spec "forProvider" }}
   {{- $snapshotRepositories_spec_forProvider := default (dict) (index $spec "forProvider") }}
   forProvider:
+    {{- if hasKey $snapshotRepositories_spec_forProvider "name" }}
+    name: {{ index $snapshotRepositories_spec_forProvider "name" | quote }}
+    {{- end }}
     {{- if hasKey $snapshotRepositories_spec_forProvider "azure" }}
     {{- $snapshotRepositories_spec_forProvider_azure := default (list) (index $snapshotRepositories_spec_forProvider "azure") }}
     azure:

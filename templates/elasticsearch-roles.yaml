@@ -22,6 +22,9 @@ spec:
   {{- if hasKey $spec "forProvider" }}
   {{- $elasticsearchRoles_spec_forProvider := default (dict) (index $spec "forProvider") }}
   forProvider:
+    {{- if hasKey $elasticsearchRoles_spec_forProvider "name" }}
+    name: {{ index $elasticsearchRoles_spec_forProvider "name" | quote }}
+    {{- end }}
     {{- if hasKey $elasticsearchRoles_spec_forProvider "applications" }}
     {{- $elasticsearchRoles_spec_forProvider_applications := default (list) (index $elasticsearchRoles_spec_forProvider "applications") }}
     applications:
